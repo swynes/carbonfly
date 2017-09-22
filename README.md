@@ -7,4 +7,4 @@ This repo contains all of the homework completed from STAT 545
 hw03
 hw04
 hw05
-hq06
+hw06
