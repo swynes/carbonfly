@@ -5,26 +5,128 @@ date: "September 25, 2017"
 output: github_document
 ---
 
+---
+title: "hw02_gapminder"
+author: "Wynes"
+date: "September 22, 2017"
+output:     html_document:
+        toc: true
+---
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+library(gapminder)
+library(tidyverse)
+library(ggrepel)
 ```
 
-## Including Plots
+#Explore Gapminder
 
-You can also embed plots, for example:
+```{r}
+typeof(gapminder)
+nrow(gapminder)
+ncol(gapminder)
+summary(gapminder)
+head(gapminder)
+typeof(gapminder$country)
+typeof(gapminder$year)
+typeof(gapminder$continent)
+typeof(gapminder$lifeExp)
+typeof(gapminder$pop)
+typeof(gapminder$gdpPercap)
+str(gapminder)
+```
+From this exploration we learn that gapminder is a list containing 6 variables (sorted in six columns) and 1704 observations (in 1704 rows).
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+Some of this information could be obtained in multiple ways. For instance, I used to the function ncol to determine the number of columns. But I could also find this by using the summary function, which shows the six columns or by using the head function, which shows the six columns and the first few rows of data for each column.
+
+The six variables come as different types of data:
+- continent is a factor
+- country is a factor
+- year is an integer
+- lifeExp is a number
+- gdpPercap is a number
+- pop is an integer
+
+#Explore Individual Variables
+```{r}
+range(gapminder$pop)
+hist(gapminder$pop)
+median(gapminder$pop)
+table(gapminder$continent)
+summary(gapminder)
+hist(gapminder$gdpPercap)
+median(gapminder$gdpPercap)
+
+```
+##Population
+The range of the population variable (pop) is from 60011 to 1318683096
+The distribution can be seen in the attached histogram, which shows non-normal, right skewed distribution. Because the data is not normal the median is an appropriate measure of central tendency, and in this case the median population is 7023596.
+
+##Continents
+There are five continents provided: Africa, Americas, Asia, Europe and Oceania
+
+##GDP Per Capita
+The range of the GDP per Capita variable is form 241.2 to 113523.1. The distribution can be seen in the attached histogram, which also shows a right skewed distribution. The median of this variable is 3531.847
+
+#Explore plot types
+First I see how GDP per Capita has changed over the years, and I label the country names of the outliers. I use the ggrepel package to ensure that the labels do not obscure the points.
+
+```{r}
+m <-ggplot(gapminder, aes(x=year, y=gdpPercap, label=country))
+m + geom_point(alpha=0.3, col="blue") +
+  geom_text_repel(data=subset(gapminder, year < 1980  & gdpPercap > 40000)) +
+    stat_smooth(method = 'lm')
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+Here I create a basic histogram of population.
+```{r}
+ggplot(gapminder, aes(x=pop)) +
+  geom_histogram(fill="#880011") +  
+  ggtitle("Histogram of Population") +
+  labs(x="Population", y="Count")
+
+```
+
+Here I calculate mean life expectancy for every country and use dplyr and piping to group by years to see how life expectancy has changed over time in Africa.
+```{r}
+gapminder %>%
+  filter(continent=="Africa") %>%
+  group_by(year) %>%
+  summarize(mean_lifeExp = mean(lifeExp)) %>%
+  ggplot(aes(x=year,y=mean_lifeExp,group=1)) + 
+    geom_point(size=3, alpha=.8, color="#880011") +
+    stat_smooth(method="lm")+
+    ggtitle("Mean life expectancy by year in Africa") +
+    labs(x="Year",y="Life Expectancy") 
+```
+
+Here I use boxplots to visualize how life expectancy varies by continent.I wanted to experiment here with adding labels to my x and y axes and also a title.
+```{r}
+  ggplot(gapminder, aes(x=continent, y=lifeExp)) + 
+    geom_boxplot(color="#880011") +
+    ggtitle("Life Expectancy") +
+    labs(x="Continent",y="Life Expectancy") 
+```
+
+Here I practice filtering and selecting with dplyr.
+```{r}
+filter(gapminder, country=="Canada")
+filter(gapminder, continent=="Oceania")
+filter(gapminder, continent=="Americas" & year == 1957)
+select(gapminder, continent,year)
+```
+
+Here I combine piping and filter from dplyr with ggplot to see how the populations of the largest European countries have changed over time. 
+```{r}
+gapminder %>% 
+    filter(continent=="Europe" & pop>18000000) %>% 
+      ggplot(aes(x=year,y=pop,col=country)) + 
+    geom_point(size=3, alpha=.8) +
+    ggtitle("Populations of the largest European nations") +
+    labs(x="Year",y="Population") 
+```
