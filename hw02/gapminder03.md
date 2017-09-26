@@ -24,8 +24,8 @@ library(tidyverse)
 library(ggrepel)
 ```
 
-Explore Gapminder
-=================
+Explore Gapminder Dataset
+=========================
 
 ``` r
 typeof(gapminder)
@@ -127,6 +127,9 @@ str(gapminder)
     ##  $ lifeExp  : num  28.8 30.3 32 34 36.1 ...
     ##  $ pop      : int  8425333 9240934 10267083 11537966 13079460 14880372 12881816 13867957 16317921 22227415 ...
     ##  $ gdpPercap: num  779 821 853 836 740 ...
+
+Summary of Exploration
+----------------------
 
 From this exploration we learn that gapminder is a list containing 6 variables (sorted in six columns) and 1704 observations (in 1704 rows).
 

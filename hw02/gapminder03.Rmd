@@ -27,6 +27,7 @@ typeof(gapminder$pop)
 typeof(gapminder$gdpPercap)
 str(gapminder)
 ```
+##Summary of Exploration
 From this exploration we learn that gapminder is a list containing 6 variables (sorted in six columns) and 1704 observations (in 1704 rows).
 
 Some of this information could be obtained in multiple ways. For instance, I used to the function ncol to determine the number of columns. But I could also find this by using the summary function, which shows the six columns or by using the head function, which shows the six columns and the first few rows of data for each column.
