@@ -119,3 +119,14 @@ gapminder %>%
     ggtitle("Populations of the largest European nations") +
     labs(x="Year",y="Population") 
 ```
+
+#BONUS
+For my bonus task I want to use this data to roughly answer the question: which country currently has the best quality of life? To find that I will create a rough indicator based on life expectancy and GDP per capita and then see which country is at the top of that list.
+```{r}
+gapminder %>%
+  mutate(quality=lifeExp*gdpPercap) %>%
+  arrange(desc(quality)) %>%
+  filter(year=="2007") 
+
+```
+Obviously quality of living is based on more than just GDP per capita and life expectancy, but given the data available this was the best metric to answer the question. By examining the data we can see if the results pass the smell test: Norway is at the top of the list, which we might expect, and the Democratic Republic of the Congo is at the bottom. This seems reasonable so I trust that the code correctly produced the answer I was looking for.
