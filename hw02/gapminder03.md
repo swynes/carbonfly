@@ -388,3 +388,8 @@ gapminder %>%
     ## # ... with 132 more rows
 
 Obviously quality of living is based on more than just GDP per capita and life expectancy, but given the data available this was the best metric to answer the question. By examining the data we can see if the results pass the smell test: Norway is at the top of the list, which we might expect, and the Democratic Republic of the Congo is at the bottom. This seems reasonable so I trust that the code correctly produced the answer I was looking for.
+
+Reflection
+==========
+
+I found it surprisingly easy to make aesthetically pleasing graphs in ggplot. Even some problems that I ran into were quickly solved by googling them (such as offsetting labels using a second package called ggrepel). I found the use of piping and dplyr in conjunction with ggplot to be much more difficult. For instance, I attempted to make a barplot of some data, and then to order the data using the dplyr arrange() function. But this did not successfully reorder the data in the plot. So some things that I thought would work intuitively did not when combining dplyr and ggplot.
