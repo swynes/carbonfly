@@ -5,18 +5,6 @@ date: "September 25, 2017"
 output: github_document
 ---
 
----
-title: "hw02_gapminder"
-author: "Wynes"
-date: "September 22, 2017"
-output:     html_document:
-        toc: true
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
 ```{r}
 library(gapminder)
 library(tidyverse)
