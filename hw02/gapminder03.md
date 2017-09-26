@@ -359,3 +359,32 @@ gapminder %>%
 ```
 
 ![](gapminder03_files/figure-markdown_github-ascii_identifiers/unnamed-chunk-9-1.png)
+
+BONUS
+=====
+
+For my bonus task I want to use this data to roughly answer the question: which country currently has the best quality of life? To find that I will create a rough indicator based on life expectancy and GDP per capita and then see which country is at the top of that list.
+
+``` r
+gapminder %>%
+  mutate(quality=lifeExp*gdpPercap) %>%
+  arrange(desc(quality)) %>%
+  filter(year=="2007") 
+```
+
+    ## # A tibble: 142 x 7
+    ##             country continent  year lifeExp       pop gdpPercap quality
+    ##              <fctr>    <fctr> <int>   <dbl>     <int>     <dbl>   <dbl>
+    ##  1           Norway    Europe  2007  80.196   4627926  49357.19 3958249
+    ##  2        Singapore      Asia  2007  79.972   4553009  47143.18 3770134
+    ##  3           Kuwait      Asia  2007  77.588   2505559  47306.99 3670455
+    ##  4    United States  Americas  2007  78.242 301139947  42951.65 3360623
+    ##  5 Hong Kong, China      Asia  2007  82.208   6980412  39724.98 3265711
+    ##  6          Ireland    Europe  2007  78.885   4109086  40676.00 3208726
+    ##  7      Switzerland    Europe  2007  81.701   7554661  37506.42 3064312
+    ##  8          Iceland    Europe  2007  81.757    301931  36180.79 2958033
+    ##  9      Netherlands    Europe  2007  79.762  16570613  36797.93 2935077
+    ## 10           Canada  Americas  2007  80.653  33390141  36319.24 2929255
+    ## # ... with 132 more rows
+
+Obviously quality of living is based on more than just GDP per capita and life expectancy, but given the data available this was the best metric to answer the question. By examining the data we can see if the results pass the smell test: Norway is at the top of the list, which we might expect, and the Democratic Republic of the Congo is at the bottom. This seems reasonable so I trust that the code correctly produced the answer I was looking for.
