@@ -11,7 +11,7 @@ library(tidyverse)
 library(ggrepel)
 ```
 
-#Explore Gapminder
+#Explore Gapminder Dataset
 
 ```{r}
 typeof(gapminder)
