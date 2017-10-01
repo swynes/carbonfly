@@ -4,3 +4,59 @@ author: "Wynes"
 date: "September 30, 2017"
 output: html_document
 ---
+
+```{r}
+library(gapminder)
+library(tidyverse)
+
+knitr::kable(gapminder)
+```
+
+# TASK 1: Find the maximum and minimum GDP per capita of each continent
+```{r}
+head(gapminder)
+
+gapminder %>%
+  group_by(continent) %>% 
+  summarize(max_gdpP = max(gdpPercap)) %>% 
+  knitr::kable()
+
+gapminder %>%
+  group_by(continent) %>% 
+  summarize(min_gdpP = min(gdpPercap)) %>% 
+  knitr::kable()
+
+gapminder %>%
+  group_by(continent) %>% 
+  ggplot(aes(x=continent,y=gdpPercap)) + 
+  geom_boxplot() +
+      scale_y_log10() +
+  labs(x="Continent", y= "GDP per capita")
+  
+```
+Here we see the maximum and minimum for each continent in graphical and tabular form. In the boxplot, we also get some insight into another question, which was the spread of GDP per capita values for each continent.
+
+
+# Task 2: How is life expectancy changing over time on different continents
+```{r}
+gapminder %>%
+  group_by(continent, year) %>% 
+  summarize(mean_lifeExp = mean(lifeExp)) %>% 
+  knitr::kable()
+```
+
+Here we see one way to get at this information, although ideally we would have separate columns for each continent, I was not able to figure out how to do that.
+
+Graphically it may be easier to see these patterns on a scatterplot.
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x=year, y=lifeExp)) +
+  geom_point()+
+  geom_smooth() +
+facet_wrap(~continent)
+```
+From the scatterplot we can conclude that the general trend for life expectancy in the various continents is that it increases over time.
+
+# Task 3: Find a country with an interesting story
+
