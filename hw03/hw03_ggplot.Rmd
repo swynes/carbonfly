@@ -8,6 +8,7 @@ output: html_document
 ```{r}
 library(gapminder)
 library(tidyverse)
+library(ggrepel)
 
 knitr::kable(gapminder)
 ```
@@ -56,7 +57,51 @@ gapminder %>%
   geom_smooth() +
 facet_wrap(~continent)
 ```
-From the scatterplot we can conclude that the general trend for life expectancy in the various continents is that it increases over time.
+From the scatterplot we can conclude that the general trend for life expectancy in the various continents is that it increases over time.To see if individual countries are following this trend I also present a spaghetti plot below:
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x=year,y=lifeExp, group=country))+
+  geom_line(alpha=0.3) +
+  geom_point()+
+  facet_wrap(~continent)
+```
+
 
 # Task 3: Find a country with an interesting story
+I'm going to be looking for signs of economic boom or bust on a national level. For this I think GDP is a better indicator than GDP per capita, so I mutate a new column to inspect it.
+```{r}
+gapminder %>% 
+  mutate(GDP1=gdpPercap*pop) %>% 
+  ggplot(aes(x=year,y=GDP1, group=country))+
+  geom_line(alpha=0.3) +
+  geom_point()+
+    scale_y_log10() +
+  facet_wrap(~continent)
+```
+
+From this, Asia and Africa seem like they have the most interesting graphs. I will select Asia for further analysis.
+
+```{r}
+gapminder %>% 
+  mutate(GDP1=gdpPercap*pop/1000000000) %>% 
+  filter(continent=="Asia") %>%
+  ggplot(aes(x=year,y=GDP1, group=country, colour = country))+
+  geom_line(alpha=0.3) +
+  geom_point()+
+    scale_y_log10()
+```
+This graph still hasn't cleared things up because it's too hard to read. It does, interestingly show that the Middle East is included in Asia in this dataset, which hadn't really occurred to me up until now. I will restrict the y-axis and x-axis to zoom in on the parts of the graph where there seems to be the most movement.
+
+```{r}
+gapminder %>% 
+  mutate(GDP1=gdpPercap*pop/1000000000) %>% 
+  filter(continent=="Asia") %>%
+  ggplot(aes(x=year,y=GDP1, group=country, colour = country))+
+  geom_line(alpha=0.3) +
+  geom_point()+
+    scale_y_log10(limits=c(10,800)) +
+  scale_x_continuous(limits=c(1965,2000))
+ 
+```
 
