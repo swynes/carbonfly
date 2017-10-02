@@ -85,6 +85,7 @@ From this, Asia and Africa seem like they have the most interesting graphs. I wi
 ```{r}
 gapminder %>% 
   mutate(GDP1=gdpPercap*pop/1000000000) %>% 
+  #Here I change GDP into billions to make it more intuitive
   filter(continent=="Asia") %>%
   ggplot(aes(x=year,y=GDP1, group=country, colour = country))+
   geom_line(alpha=0.3) +
@@ -100,8 +101,54 @@ gapminder %>%
   ggplot(aes(x=year,y=GDP1, group=country, colour = country))+
   geom_line(alpha=0.3) +
   geom_point()+
-    scale_y_log10(limits=c(10,800)) +
+    scale_y_log10(limits=c(50,800)) +
   scale_x_continuous(limits=c(1965,2000))
  
 ```
+This graph really shows the one country whose GDP dropped drastically in the late 80s and into the early 90s, but even with the colour differentiation it's hard to tell them apart.
 
+```{r}
+gapminder %>% 
+  mutate(GDP1=gdpPercap*pop/1000000000) %>% 
+  filter(country=="Iraq") %>%
+  ggplot(aes(x=year,y=GDP1, group=country, colour = country))+
+  geom_line(alpha=0.3) +
+  geom_point()+
+    scale_y_log10(limits=c(50,800)) +
+  scale_x_continuous(limits=c(1965,2000))
+```
+I guessed that the green colour was Iraq, filtered by country, and found this. I am guessing that the plunge in GDP was caused by the Gulf War, which happened in 1990. Kuwait was also annexed by Iraq prior to the war, so I'll isolate Kuwait over the same time period:
+
+So I find it much easier to code with ggplot than dplyr, but this was a rambling, imprecise way to go about finding this interesting tidbit. I'll try now to find what country experienced the greatest drop in GDP by looking at tables.
+
+```{r}
+?arrange
+```
+
+
+```{r}
+gapminder %>%
+  mutate(GDP1=gdpPercap*pop/1000000000) %>% 
+  select(country, year, continent, GDP1) %>%
+  group_by(continent, country) %>%
+  ## within countries take the GDP and subtract the GDP from the previous year
+  mutate(econ = GDP1 - lag(GDP1)) %>% 
+  summarize(bust = min(econ, na.rm = TRUE)) %>% 
+  arrange(bust) %>% 
+    knitr::kable()
+```
+The column "bust" shows the countries with the greatest decreases in GDP at the top, and the greatest increases at the bottom. Iraq was where we might have expected after the informal survey of results from ggplot. The greatest increase in GDP was the United States, which got me thinking that although the US might have had the greatest absolute increase in GDP, that could be because they have a very large economy. A more telling sign of a boom or a bust is having a large increase or decrease in GDP compared to one's own GDP (e.g. America's economy increasing by 1% is a large absolute value, but is less remarkable than if Ireland's GDP tripled even if that resulted in the same value).
+
+Below I test instead for greatest relative changes in GDP:
+
+```{r}
+gapminder %>%
+  mutate(GDP1=gdpPercap*pop/1000000000) %>% 
+  select(country, year, continent, GDP1) %>%
+  group_by(continent, country) %>%
+  mutate(econ = ((GDP1 - lag(GDP1))/GDP1)) %>% 
+  summarize(bust = min(econ, na.rm = TRUE)) %>% 
+  arrange(bust) %>% 
+    knitr::kable()
+```
+Now the largest single decrease is still in Iraw, but the largest increase is now in Korea. Unfortunately the table is long and is not displaying the year and I'm not sure how to fix that (for instance I can't get the head() function to work in place of summarize).
