@@ -47,6 +47,7 @@ gapminder %>%
   knitr::kable()
 ```
 
+
 Here we see one way to get at this information, although ideally we would have separate columns for each continent, I was not able to figure out how to do that.
 
 Graphically it may be easier to see these patterns on a scatterplot.
@@ -58,7 +59,10 @@ gapminder %>%
   geom_smooth() +
 facet_wrap(~continent)
 ```
+
+
 From the scatterplot we can conclude that the general trend for life expectancy in the various continents is that it increases over time.To see if individual countries are following this trend I also present a spaghetti plot below:
+
 
 ```{r}
 gapminder %>% 
@@ -71,6 +75,7 @@ gapminder %>%
 
 # Task 3: Find a country with an interesting story
 I'm going to be looking for signs of economic boom or bust on a national level. For this I think GDP is a better indicator than GDP per capita, so I mutate a new column to inspect it.
+
 ```{r}
 gapminder %>% 
   mutate(GDP1=gdpPercap*pop) %>% 
@@ -80,6 +85,7 @@ gapminder %>%
     scale_y_log10() +
   facet_wrap(~continent)
 ```
+
 
 From this, Asia and Africa seem like they have the most interesting graphs. I will select Asia for further analysis.
 
@@ -93,6 +99,8 @@ gapminder %>%
   geom_point()+
     scale_y_log10()
 ```
+
+
 This graph still hasn't cleared things up because it's too hard to read. It does, interestingly show that the Middle East is included in Asia in this dataset, which hadn't really occurred to me up until now. I will restrict the y-axis and x-axis to zoom in on the parts of the graph where there seems to be the most movement.
 
 ```{r}
@@ -106,6 +114,8 @@ gapminder %>%
   scale_x_continuous(limits=c(1965,2000))
  
 ```
+
+
 This graph really shows the one country whose GDP dropped drastically in the late 80s and into the early 90s, but even with the colour differentiation it's hard to tell them apart.
 
 ```{r}
@@ -118,6 +128,7 @@ gapminder %>%
     scale_y_log10(limits=c(50,800)) +
   scale_x_continuous(limits=c(1965,2000))
 ```
+
 I guessed that the green colour was Iraq, filtered by country, and found this. I am guessing that the plunge in GDP was caused by the Gulf War, which happened in 1990. Kuwait was also annexed by Iraq prior to the war, so I'll isolate Kuwait over the same time period:
 
 So I find it much easier to code with ggplot than dplyr, but this was a rambling, imprecise way to go about finding this interesting tidbit. I'll try now to find what country experienced the greatest drop in GDP by looking at tables.
@@ -134,9 +145,12 @@ gapminder %>%
   arrange(bust) %>% 
     knitr::kable()
 ```
+
+
 The column "bust" shows the countries with the greatest decreases in GDP at the top, and the greatest increases at the bottom. Iraq was where we might have expected after the informal survey of results from ggplot. The greatest increase in GDP was the United States, which got me thinking that although the US might have had the greatest absolute increase in GDP, that could be because they have a very large economy. A more telling sign of a boom or a bust is having a large increase or decrease in GDP compared to one's own GDP (e.g. America's economy increasing by 1% is a large absolute value, but is less remarkable than if Ireland's GDP tripled even if that resulted in the same value).
 
 Below I test instead for greatest relative changes in GDP:
+
 
 ```{r}
 gapminder %>%
