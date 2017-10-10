@@ -84,20 +84,28 @@ This time I noticed that the co2 data does not go back as far, so there are NA v
   mutate_at(c(2), as.numeric) %>%
 inner_join(gapminder, ghg4, by = c("country","year"))
 ```
-This dataframe only contains rows where I have full information from both datasets. Depending on one's purposes this might be the easiest data to at least explore. I'm going to perform a quick test with it:
+This dataframe only contains rows where I have full information from both datasets. Depending on one's purposes this might be the easiest data to explore. I'm going to perform a quick test with it:
+
+```{r}
+ ghg_gap <- ghg4 %>% 
+  mutate_at(c(2), as.numeric) %>%
+inner_join(gapminder, ghg4, by = c("country","year"))
+
+ghg_gap %>% 
+  ggplot(aes(x=lifeExp,y=co2pcap), na.rm=TRUE)+
+  geom_point(alpha=0.2)
+
+```
+So something seems to be wrong with the data but I"m not sure what. I've seen this before with NA values but I don't have any here. I'll try some other joins and see if they experience the same problems.
 
 ```{r}
  ghg4 %>% 
   mutate_at(c(2), as.numeric) %>%
-inner_join(gapminder, ghg4, by = c("country","year")) %>% 
-  filter(continent=="Asia") %>% 
-  ggplot(aes(x=gdpPercap,y=co2pcap))+
-  geom_point(alpha=0.2)
+full_join(gapminder, ghg4, by = c("country","year"))
 ```
-
-
+I tried semi_join and found that it really returned back very little information. full_join, as seen above, retains all of the data from both dataframes, with the downside that there are now a lot of NA values.
 
 #Reflection
 So I know I accomplished a lot less than I normally would because I chose a dataframe that wasn't nicely cleaned up already. It took me some time to find out how to convert a csv into a tibble (among many resources, I used this page: http://readr.tidyverse.org/reference/read_delim.html). 
 
-Additionally, it was very difficult to join the two dataframes. The dataframe on CO2 per capita emissions by different countries has NA values which seems to cause errors when joining them. I managed to use complete.cases to create a version of the database without NA values (in actual research this would not be ideal but I am just trying to learn how to join dataframes). Even then I was still getting error messages for having incompatible types of columns.
+Additionally, it was very difficult to join the two dataframes. The dataframe on CO2 per capita emissions by different countries has NA values which seems to cause errors when joining them. I managed to use complete.cases to create a version of the database without NA values (in actual research this would not be ideal but I am just trying to learn how to join dataframes). Even then I was still getting error messages for having incompatible types of columns which took more troubleshooting.
