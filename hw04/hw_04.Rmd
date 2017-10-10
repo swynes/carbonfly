@@ -4,7 +4,7 @@ author: "Wynes"
 date: "October 9, 2017"
 output: github_document
 ---
-Part I - Importing and tidying a database
+#Part I - Importing and tidying a database
 
 For this exercise I want to import a database and then attach it to gapminder. The database is of carbon dioxide per capita emissions from: EDGARv4.2, European Commission, Joint Research Centre (JRC)/PBL Netherlands Environmental Assessment Agency. Emission Database for Global Atmospheric Research (EDGAR), release version 4.2. http://edgar.jrc.ec.europe.eu, 2011
 
@@ -13,6 +13,7 @@ So I'm using the read_csv function from the "readr" package, which is already pa
 ```{r}
 
 library("tidyverse")
+library(gapminder)
 
 co2percap <- read_csv("C:/Users/AsusW10/Documents/STAT545/co2pcap.csv")
 View(co2percap)
@@ -24,11 +25,16 @@ Now because the years are listed as columns and the countries are listed as rows
 ```{r}
 co2percap %>% gather(year,co2pcap,-c(Country)) %>% 
   arrange(Country)
-  knitr::kable()
 ```
+
+
+
 So I've successfully converted a wide data frame into a long data frame and then used the knitr::kable function to display this in a pleasing way.
 
 Let's graph the data to see that it looks reasonable and that nothing has gone amiss.
+
+
+
 ```{r}
 ghg <- co2percap %>% gather(year,co2pcap,-c(Country)) %>% 
   arrange(Country) 
@@ -37,7 +43,10 @@ ghg %>%
   ggplot(aes(x=year, y=co2pcap))+
   geom_point(alpha=0.2)
 ```
+
+
 There are a lot of NA values, and I tried removing them with na.rm=T, and na.omit but nothing seems to be working. The data seems fine when examining it in a table, but smell testing it with ggplot isn't going to work. I'm going to look at Canadian values for the years where data is available.
+
 
 ```{r}
 ghg %>% 
@@ -46,11 +55,15 @@ ghg %>%
   geom_point()+ 
   theme(axis.text.x=element_text(angle=90,hjust=1))
 ```
+
+
 These values range within a reasonable space for Canadian per capita emissions.
 
 ##Part II - Joining with gapminder using dplyr
 
-When I first tried to join these datasets I realized that the column name for country was capitalized in the ghg dataset but not in gapminder, so I used the rename function so that dplyr would recognize the columns as being the same. After this 
+When I first tried to join these datasets I realized that the column name for country was capitalized in the ghg dataset but not in gapminder, so I used the rename function so that dplyr would recognize the columns as being the same.
+
+
 ```{r}
 ghg2 <- rename(ghg,country = Country)
 View(ghg2)
@@ -65,26 +78,37 @@ So I tried to use this code
 left_join(gapminder, ghg4, by = c("country","year"))
 
 to join the dataframes, but have come up with an error because the year column in the ghg dataframe is not integers. But I found a solution that seems to work on stackoverflow (https://stackoverflow.com/questions/43126096/change-select-columns-from-character-to-integers)
+
+
 ```{r}
  ghg4 %>% 
   mutate_at(c(2), as.numeric) %>%
 left_join(gapminder, ghg4, by = c("country","year"))
 ```
+
+
 Because gapminder only has data for ever five years, four out of every five rows are blank for the gapminder data. I can try a left join using the co2 data as my left dataframe
+
 
 ```{r}
  ghg4 %>% 
   mutate_at(c(2), as.numeric) %>%
 right_join(gapminder, ghg4, by = c("country","year"))
 ```
+
+
 This time I noticed that the co2 data does not go back as far, so there are NA values for 1952, 1957, 1962, and 1967 for the new co2pcap column in this dataframe.
+
 
 ```{r}
  ghg4 %>% 
   mutate_at(c(2), as.numeric) %>%
 inner_join(gapminder, ghg4, by = c("country","year"))
 ```
+
+
 This dataframe only contains rows where I have full information from both datasets. Depending on one's purposes this might be the easiest data to explore. I'm going to perform a quick test with it:
+
 
 ```{r}
  ghg_gap <- ghg4 %>% 
@@ -96,13 +120,18 @@ ghg_gap %>%
   geom_point(alpha=0.2)
 
 ```
+
+
 So something seems to be wrong with the data but I"m not sure what. I've seen this before with NA values but I don't have any here. I'll try some other joins and see if they experience the same problems.
+
 
 ```{r}
  ghg4 %>% 
   mutate_at(c(2), as.numeric) %>%
 full_join(gapminder, ghg4, by = c("country","year"))
 ```
+
+
 I tried semi_join and found that it really returned back very little information. full_join, as seen above, retains all of the data from both dataframes, with the downside that there are now a lot of NA values.
 
 #Reflection
