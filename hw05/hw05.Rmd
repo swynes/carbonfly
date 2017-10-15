@@ -1,0 +1,30 @@
+---
+title: "hw05"
+author: "Wynes"
+date: "October 14, 2017"
+output: html_document
+---
+In this assignment I'm practicing working with factors and inputting and outputting the data. 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(gapminder))
+suppressPackageStartupMessages(library(forcats))
+```
+Drop Oceania from the list of continents
+```{r}
+#Filter out Oceania
+list(gapminder$continent)
+noo_continents <- c("Asia", "Africa", "Europe", "Americas")
+noo_gap <- gapminder %>%
+  filter(continent %in% h_continents)
+
+#Now remove the unwanted Oceania level from the new df h_gap
+noo_gap_drop <- noo_gap %>% 
+  droplevels()
+nlevels(noo_gap_drop$continent)
+```
+
