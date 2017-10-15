@@ -77,11 +77,42 @@ fct_reorder(noo_gap_drop$country, noo_gap_drop$gdpPercap) %>%
   levels() %>% head()
 
 #The default uses median GDP per capita. Here I update to using mean:
-fct_reorder(noo_gap_drop$country, noo_gap_drop$lifeExp, mean) %>% 
+fct_reorder(noo_gap_drop$country, noo_gap_drop$gdpPercap, mean) %>% 
   levels() %>% head()
 
-#And now 
+#And now use reordering inside ggplot
+noo_gap_drop2 <- noo_gap_drop %>% filter(continent == "Americas", year =="2007")
+ggplot(noo_gap_drop2, aes(y = gdpPercap, x = fct_reorder(country, gdpPercap))) +
+  geom_col() +
+  theme(axis.text.x=element_text(angle=90,hjust=1)) +
+  labs(x="Country" , y= "GDP per capita")
 
 ```
+
+
+
+That worked well, let's try and replicate that with the arrange function:
+```{r}
+  noo_gap_drop2 %>% 
+  arrange(gdpPercap) %>% 
+ggplot(aes(y = gdpPercap, x = country)) +
+  geom_col() +
+  theme(axis.text.x=element_text(angle=90,hjust=1)) +
+  labs(x="Country" , y= "GDP per capita")
+```
+
+
+
+I conclude that arrange does not carry over into ggplot with piping. I'm going to add the fct_reorder function back in and see if it is still compatible with the arrange function.
+
+```{r}
+  noo_gap_drop2 %>% 
+  arrange(gdpPercap) %>% 
+ggplot(aes(y = gdpPercap, x = fct_reorder(country, gdpPercap))) +
+  geom_col() +
+  theme(axis.text.x=element_text(angle=90,hjust=1)) +
+  labs(x="Country" , y= "GDP per capita")
+```
+
 
 
