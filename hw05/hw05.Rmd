@@ -14,6 +14,12 @@ suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(gapminder))
 suppressPackageStartupMessages(library(forcats))
 ```
+
+
+
+*Dropping factors
+
+
 Drop Oceania from the list of continents
 ```{r}
 #Filter out Oceania
@@ -25,6 +31,57 @@ noo_gap <- gapminder %>%
 #Now remove the unwanted Oceania level from the new df h_gap
 noo_gap_drop <- noo_gap %>% 
   droplevels()
-nlevels(noo_gap_drop$continent)
 ```
+
+
+
+So I've removed the Oceania continent in the new object, noo_gap, and then in the object noo_gap_drop I've gone further and dropped the levels associated with it. We can inspect both of the objects to contrast their properties.
+
+```{r}
+nlevels(noo_gap$continent)
+nlevels(noo_gap_drop$continent)
+
+noo_gap$continent %>% 
+levels() 
+
+noo_gap_drop$continent %>% 
+  levels()
+  
+fct_count(noo_gap$continent)
+fct_count(noo_gap_drop$continent)
+
+```
+
+
+
+From the levels function we see that noo_gap has one more continent listed as a factor than noo_gap_drop and two more countries.
+
+From the fct_count argument we can see that noo_gap has the same number of rows for each continent as noo_gap_drop except that Oceania is missing completely in noo_gap_drop whereas in noo_gap it is listed as having zero rows.
+
+*Rearranging Factors
+```{r}
+noo_gap_drop$continent %>% 
+  fct_infreq() %>%
+  levels() %>% head()
+```
+
+
+
+Here I've rearranged so that the factor with the largest number of rows (see the fct_count result above) comes first.
+
+This isn't terribly interesting so let's rearrange countries based on GDP per capita instead.
+
+
+```{r}
+fct_reorder(noo_gap_drop$country, noo_gap_drop$gdpPercap) %>% 
+  levels() %>% head()
+
+#The default uses median GDP per capita. Here I update to using mean:
+fct_reorder(noo_gap_drop$country, noo_gap_drop$lifeExp, mean) %>% 
+  levels() %>% head()
+
+#And now 
+
+```
+
 
