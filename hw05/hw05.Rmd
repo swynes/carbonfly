@@ -23,10 +23,10 @@ suppressPackageStartupMessages(library(forcats))
 Drop Oceania from the list of continents
 ```{r}
 #Filter out Oceania
-list(gapminder$continent)
+levels(gapminder$continent)
 noo_continents <- c("Asia", "Africa", "Europe", "Americas")
 noo_gap <- gapminder %>%
-  filter(continent %in% h_continents)
+  filter(continent %in% noo_continents)
 
 #Now remove the unwanted Oceania level from the new df h_gap
 noo_gap_drop <- noo_gap %>% 
@@ -103,11 +103,11 @@ ggplot(aes(y = gdpPercap, x = country)) +
 
 
 
-I conclude that arrange does not carry over into ggplot with piping. I'm going to add the fct_reorder function back in and see if it is still compatible with the arrange function.
+I conclude that arrange does not carry over into ggplot with piping. I'm going to add the fct_reorder function back in and see if it is still compatible with the arrange function, but give arrange an opposing command (to arrange by life expectancy instead of GDP per capita).
 
 ```{r}
   noo_gap_drop2 %>% 
-  arrange(gdpPercap) %>% 
+  arrange(lifeExp) %>% 
 ggplot(aes(y = gdpPercap, x = fct_reorder(country, gdpPercap))) +
   geom_col() +
   theme(axis.text.x=element_text(angle=90,hjust=1)) +
@@ -115,4 +115,56 @@ ggplot(aes(y = gdpPercap, x = fct_reorder(country, gdpPercap))) +
 ```
 
 
+
+And the figure was clearly ordered by GDP per capita with no regards for the arrange function.
+
+Here I check and see that arrange is still working, and find that it does order the countries correctly by GDP per capita in a table.
+
+```{r}
+ noo_gap_drop2 %>% 
+  arrange(gdpPercap) %>% 
+  filter(continent=="Americas") %>% 
+  glimpse() %>% 
+  knitr::kable()
+```
+
+
+
+*File I/O
+Now that the data has had Oceania removed, levels dropped, filtered to just the Americas and arranged by GDP per capita I'm going to write it to file and then import it back to see what changes have occurred.
+
+```{r}
+America_GDP <- noo_gap_drop2 %>% 
+  arrange(gdpPercap) %>% 
+  filter(continent=="Americas")
+
+head(America_GDP) %>% 
+  knitr::kable()
+```
+
+
+
+Writing to file:
+```{r}
+write_csv(America_GDP, "America_GDP.csv")
+```
+
+
+
+At this point I checked and found a csv file in my working directory on my laptop. Now to read the file back in.
+
+```{r}
+America_GDP2 <- read_csv("America_GDP.csv")
+
+glimpse(America_GDP2) %>% 
+  knitr::kable
+```
+
+
+
+Recalling the original object (see below) before the input output process, we can see that the order of the countries has been preserved, but in the original object country and continents were factors and in the imported object they are both coded as characters.
+```{r}
+glimpse(America_GDP) %>% 
+  knitr::kable
+```
 
