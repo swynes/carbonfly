@@ -156,16 +156,14 @@ At this point I checked and found a csv file in my working directory on my lapto
 ```{r}
 America_GDP2 <- read_csv("America_GDP.csv")
 
-glimpse(America_GDP2) %>% 
-  knitr::kable
+glimpse(America_GDP2) 
 ```
 
 
 
 Recalling the original object (see below) before the input output process, we can see that the order of the countries has been preserved, but in the original object country and continents were factors and in the imported object they are both coded as characters.
 ```{r}
-glimpse(America_GDP) %>% 
-  knitr::kable
+glimpse(America_GDP) 
 ```
 
 
@@ -201,8 +199,6 @@ glimpse(gap_ghg2)
 Now I'm ready to try and run some visualizations.
 
 ```{r}
-install.packages("gridExtra")
-install.packages("cowplot")
 
 library(cowplot)
 
@@ -227,27 +223,40 @@ grid.arrange(plot1, plot2, nrow=1)
 combined_plot <- grid.arrange(plot1, plot2, nrow=1)
 
 save_plot("combined.png", combined_plot, base_aspect_ratio = 1.9)
+#save_plot() is the save function for cowplot instead of ggsave() for ggplot
+
 ```
 
 
+![Final Plot.](C:/Users/AsusW10/Documents/STAT545/STAT545-hw-wynes-chris/hw05/combined.png)
 
 So this graph uses a colour scheme from the viridis package, and also makes use of the cowplot package, which changes the default settings in ggplot to something more minimalist. I like how cowplot altered the fonts so that they are a bit more readable than in base ggplot and also how it automatically changed the units, however in my case it made the units on the x-axis for GDP per capita a bit too cramped. I improved this by changing the base aspect ratio to 1.9 when saving the plot. I've also used the gridExtra package to place both graphs side by side. 
 
 
-
-
+Below, I replicate an exercise from class on my own dataset.
 ```{r}
 #Prepare greenhouse gas data set for use by changing year and co2pcap to numeric
+
 ghg5 <- ghg4 %>% 
   mutate_at(c(2,3), as.numeric)
 
-
-ggthemr(earth)
-
 ghg5 %>% 
-  ggplot(aes(x=year,y=co2pcap)) +
-  geom_line(aes(group=country), alpha=0.2) 
+  arrange(-co2pcap)
 
-grid.arrange(plot1, plot2, nrow=1)
+
+colour_layer <- scale_colour_manual("", 
+                                    labels=c("Other Countries", "Qatar"),
+                                    values=c("black", "red"))
+
+qatar <- ghg5 %>% 
+  ggplot(aes(x=year,y=co2pcap)) +
+  geom_line(aes(group=country, colour=country=="Qatar", alpha=country=="Qatar")) +
+  colour_layer +
+  scale_alpha_discrete(range=c(0.2,1), guide=FALSE)+
+  labs(x="Year", y="CO2 emissions per capita")
+
+save_plot("qatar.png", qatar, base_aspect_ratio =1.5)
+
 ```
 
+![This plot shows national trends in greenhouse gas emissions and Qatar is highlighted in red.](C:/Users/AsusW10/Documents/STAT545/STAT545-hw-wynes-chris/hw05/qatar.png)
