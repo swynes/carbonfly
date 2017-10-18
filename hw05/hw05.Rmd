@@ -168,3 +168,86 @@ glimpse(America_GDP) %>%
   knitr::kable
 ```
 
+
+
+*Visualization design
+In the last assignment I imported a greenhouse gas database and joined it with gapminder. Here I add that data back into gapminder to have something new to work with.
+
+The rundown of the code in this next chunk is that I'm adding a new dataset, joining it to gapminder and then cleaning it up and calling it gap_ghg2
+```{r}
+co2percap <- read_csv("C:/Users/AsusW10/Documents/STAT545/co2pcap.csv")
+ghg <- co2percap %>% gather(year,co2pcap,-c(Country)) %>% 
+  arrange(Country)
+ghg2 <- rename(ghg,country = Country)
+ghg4 <- ghg2[complete.cases(ghg2), ]
+
+glimpse(ghg4)
+
+gap_ghg <-  ghg4 %>% 
+  mutate_at(c(2), as.numeric) %>% 
+inner_join(gapminder, ghg4, by = c("country","year")) %>% 
+  droplevels()
+   
+gap_ghg2 <- gap_ghg %>% 
+    mutate_at(c(3), as.numeric) 
+
+glimpse(gap_ghg2)
+#Check and see that data looks good
+
+```
+
+
+
+Now I'm ready to try and run some visualizations.
+
+```{r}
+install.packages("gridExtra")
+install.packages("cowplot")
+
+library(cowplot)
+
+library(gridExtra)
+
+library(viridis)
+
+plot1 <- gap_ghg2 %>% 
+  ggplot(aes(x= lifeExp, y=co2pcap)) +
+  geom_point(aes(color = year)) +
+  scale_colour_viridis(option="inferno") +
+  labs(x="Life Expectancy", y="CO2 per capita")
+
+plot2 <- gap_ghg2 %>% 
+  ggplot(aes(x= gdpPercap, y=co2pcap)) +
+  geom_point(aes(color = year)) +
+  scale_colour_viridis(option="inferno") +
+   labs(x="GDP per capita", y="CO2 per capita")
+
+grid.arrange(plot1, plot2, nrow=1)
+
+combined_plot <- grid.arrange(plot1, plot2, nrow=1)
+
+save_plot("combined.png", combined_plot, base_aspect_ratio = 1.9)
+```
+
+
+
+So this graph uses a colour scheme from the viridis package, and also makes use of the cowplot package, which changes the default settings in ggplot to something more minimalist. I like how cowplot altered the fonts so that they are a bit more readable than in base ggplot and also how it automatically changed the units, however in my case it made the units on the x-axis for GDP per capita a bit too cramped. I improved this by changing the base aspect ratio to 1.9 when saving the plot. I've also used the gridExtra package to place both graphs side by side. 
+
+
+
+
+```{r}
+#Prepare greenhouse gas data set for use by changing year and co2pcap to numeric
+ghg5 <- ghg4 %>% 
+  mutate_at(c(2,3), as.numeric)
+
+
+ggthemr(earth)
+
+ghg5 %>% 
+  ggplot(aes(x=year,y=co2pcap)) +
+  geom_line(aes(group=country), alpha=0.2) 
+
+grid.arrange(plot1, plot2, nrow=1)
+```
+
