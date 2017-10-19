@@ -2,7 +2,7 @@
 title: "hw05"
 author: "Wynes"
 date: "October 14, 2017"
-output: html_document
+output: github_document
 ---
 
 # Homework 5
