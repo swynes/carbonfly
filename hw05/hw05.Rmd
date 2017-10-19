@@ -226,7 +226,7 @@ grid.arrange(plot1, plot2, nrow=1)
 
 combined_plot <- grid.arrange(plot1, plot2, nrow=1)
 
-save_plot("combined.png", combined_plot, base_aspect_ratio = 1.9)
+save_plot("combined.png", combined_plot, base_aspect_ratio = 1.8)
 #save_plot() is the save function for cowplot instead of ggsave() for ggplot
 
 ```
@@ -259,7 +259,7 @@ qatar <- ghg5 %>%
   scale_alpha_discrete(range=c(0.2,1), guide=FALSE)+
   labs(x="Year", y="CO2 emissions per capita")
 
-save_plot("qatar.png", qatar, base_aspect_ratio =1.5)
+save_plot("qatar.png", qatar, base_aspect_ratio =1.4)
 
 ```
 
