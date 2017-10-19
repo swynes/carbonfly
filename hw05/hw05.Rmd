@@ -2,8 +2,12 @@
 title: "hw05"
 author: "Wynes"
 date: "October 14, 2017"
-output: html_document
+output: github_document
 ---
+
+# Homework 5
+
+
 In this assignment I'm practicing working with factors and inputting and outputting the data. 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -17,7 +21,7 @@ suppressPackageStartupMessages(library(forcats))
 
 
 
-*Dropping factors
+## Dropping factors
 
 
 Drop Oceania from the list of continents
@@ -130,7 +134,7 @@ Here I check and see that arrange is still working, and find that it does order 
 
 
 
-*File I/O
+## File I/O
 Now that the data has had Oceania removed, levels dropped, filtered to just the Americas and arranged by GDP per capita I'm going to write it to file and then import it back to see what changes have occurred.
 
 ```{r}
@@ -168,7 +172,7 @@ glimpse(America_GDP)
 
 
 
-*Visualization design
+## Visualization design
 In the last assignment I imported a greenhouse gas database and joined it with gapminder. Here I add that data back into gapminder to have something new to work with.
 
 The rundown of the code in this next chunk is that I'm adding a new dataset, joining it to gapminder and then cleaning it up and calling it gap_ghg2
@@ -260,3 +264,11 @@ save_plot("qatar.png", qatar, base_aspect_ratio =1.5)
 ```
 
 ![This plot shows national trends in greenhouse gas emissions and Qatar is highlighted in red.](C:/Users/AsusW10/Documents/STAT545/STAT545-hw-wynes-chris/hw05/qatar.png)
+
+
+
+## Reflect on the process
+
+I really enjoyed trying out ways to improve my plotting with ggplot and the various ad ons. I tried to use a devtool package called ggthemr but when cowplot is loaded it seems to override ggthemr so I was not able to use both in the same file. That's the first time that I've experienced packages negatively interacting.
+
+I was dreading having to reorganize my repo but I'm excited to have that resource for the future. I think I may do that with all of my work as I'm frequently coming across problems that I've solved before, but the solution might just be a single line of code for a specific problem. Having an organized area with all of my files and a list of the useful functions or skills used inside of them would be really helpful for this.
