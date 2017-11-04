@@ -1,7 +1,5 @@
 ---
-title: "hw06"
-author: "Wynes"
-date: "November 2, 2017"
+title: "hw06copy"
 output: html_document
 ---
 
@@ -9,74 +7,75 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Homework 6
+## Practicing functions with a CARBON CALCULATOR
 
 In this homework I'm going to start by trying to make my own function that acts as a carbon calculator (translating two airport codes into a distance and then an amount of greenhouse gases).
 
-Step 1 is to find code that converts latitude and longitude into greater circle distance. This code is long, but is very precise because it accounts for the fact that the earth is not a perfect sphere, which most available calculators neglect. I found it here:
-https://www.r-bloggers.com/great-circle-distance-calculations-in-r/
-
+Step 1 is to find code that converts latitude and longitude into greater circle distance. This code is long, but is very precise because it accounts for the fact that the earth is not a perfect sphere, which most available calculators neglect. I found it here: https://www.r-bloggers.com/great-circle-distance-calculations-in-r/
 ```{r}
-deg2rad <- function(deg) return(deg*pi/180)
+deg2rad <- function(deg) return(deg*pi/180) #Change degrees into radians
+#CHECK
+deg2rad(180)
+
 gcd.vif <- function(long1, lat1, long2, lat2) {
- 
-  # WGS-84 ellipsoid parameters
-  a <- 6378137         # length of major axis of the ellipsoid (radius at equator)
-  b <- 6356752.314245  # ength of minor axis of the ellipsoid (radius at the poles)
-  f <- 1/298.257223563 # flattening of the ellipsoid
- 
-  L <- long2-long1 # difference in longitude
-  U1 <- atan((1-f) * tan(lat1)) # reduced latitude
-  U2 <- atan((1-f) * tan(lat2)) # reduced latitude
-  sinU1 <- sin(U1)
-  cosU1 <- cos(U1)
-  sinU2 <- sin(U2)
-  cosU2 <- cos(U2)
- 
-  cosSqAlpha <- NULL
-  sinSigma <- NULL
-  cosSigma <- NULL
-  cos2SigmaM <- NULL
-  sigma <- NULL
- 
-  lambda <- L
-  lambdaP <- 0
-  iterLimit <- 100
-  while (abs(lambda-lambdaP) > 1e-12 & iterLimit>0) {
-    sinLambda <- sin(lambda)
-    cosLambda <- cos(lambda)
-    sinSigma <- sqrt( (cosU2*sinLambda) * (cosU2*sinLambda) +
-                      (cosU1*sinU2-sinU1*cosU2*cosLambda) * (cosU1*sinU2-sinU1*cosU2*cosLambda) )
-    if (sinSigma==0) return(0)  # Co-incident points
-    cosSigma <- sinU1*sinU2 + cosU1*cosU2*cosLambda
-    sigma <- atan2(sinSigma, cosSigma)
-    sinAlpha <- cosU1 * cosU2 * sinLambda / sinSigma
-    cosSqAlpha <- 1 - sinAlpha*sinAlpha
-    cos2SigmaM <- cosSigma - 2*sinU1*sinU2/cosSqAlpha
-    if (is.na(cos2SigmaM)) cos2SigmaM <- 0  # Equatorial line: cosSqAlpha=0
-    C <- f/16*cosSqAlpha*(4+f*(4-3*cosSqAlpha))
-    lambdaP <- lambda
-    lambda <- L + (1-C) * f * sinAlpha *
-              (sigma + C*sinSigma*(cos2SigmaM+C*cosSigma*(-1+2*cos2SigmaM*cos2SigmaM)))
-    iterLimit <- iterLimit - 1
-  }
-  if (iterLimit==0) return(NA)  # formula failed to converge
-  uSq <- cosSqAlpha * (a*a - b*b) / (b*b)
-  A <- 1 + uSq/16384*(4096+uSq*(-768+uSq*(320-175*uSq)))
-  B <- uSq/1024 * (256+uSq*(-128+uSq*(74-47*uSq)))
-  deltaSigma = B*sinSigma*(cos2SigmaM+B/4*(cosSigma*(-1+2*cos2SigmaM^2) -
-                                      B/6*cos2SigmaM*(-3+4*sinSigma^2)*(-3+4*cos2SigmaM^2)))
-  s <- b*A*(sigma-deltaSigma) / 1000
- 
-  return(s) # Distance in km
+
+# WGS-84 ellipsoid parameters
+a <- 6378137         # length of major axis of the ellipsoid (radius at equator)
+b <- 6356752.314245  # ength of minor axis of the ellipsoid (radius at the poles)
+f <- 1/298.257223563 # flattening of the ellipsoid
+
+L <- long2-long1 # difference in longitude
+U1 <- atan((1-f) * tan(lat1)) # reduced latitude
+U2 <- atan((1-f) * tan(lat2)) # reduced latitude
+sinU1 <- sin(U1)
+cosU1 <- cos(U1)
+sinU2 <- sin(U2)
+cosU2 <- cos(U2)
+
+cosSqAlpha <- NULL
+sinSigma <- NULL
+cosSigma <- NULL
+cos2SigmaM <- NULL
+sigma <- NULL
+
+lambda <- L
+lambdaP <- 0
+iterLimit <- 100
+while (abs(lambda-lambdaP) > 1e-12 & iterLimit>0) {
+sinLambda <- sin(lambda)
+cosLambda <- cos(lambda)
+sinSigma <- sqrt( (cosU2*sinLambda) * (cosU2*sinLambda) +
+(cosU1*sinU2-sinU1*cosU2*cosLambda) * (cosU1*sinU2-sinU1*cosU2*cosLambda) )
+if (sinSigma==0) return(0)  # Co-incident points
+cosSigma <- sinU1*sinU2 + cosU1*cosU2*cosLambda
+sigma <- atan2(sinSigma, cosSigma)
+sinAlpha <- cosU1 * cosU2 * sinLambda / sinSigma
+cosSqAlpha <- 1 - sinAlpha*sinAlpha
+cos2SigmaM <- cosSigma - 2*sinU1*sinU2/cosSqAlpha
+if (is.na(cos2SigmaM)) cos2SigmaM <- 0  # Equatorial line: cosSqAlpha=0
+C <- f/16*cosSqAlpha*(4+f*(4-3*cosSqAlpha))
+lambdaP <- lambda
+lambda <- L + (1-C) * f * sinAlpha *
+(sigma + C*sinSigma*(cos2SigmaM+C*cosSigma*(-1+2*cos2SigmaM*cos2SigmaM)))
+iterLimit <- iterLimit - 1
+}
+if (iterLimit==0) return(NA)  # formula failed to converge
+uSq <- cosSqAlpha * (a*a - b*b) / (b*b)
+A <- 1 + uSq/16384*(4096+uSq*(-768+uSq*(320-175*uSq)))
+B <- uSq/1024 * (256+uSq*(-128+uSq*(74-47*uSq)))
+deltaSigma = B*sinSigma*(cos2SigmaM+B/4*(cosSigma*(-1+2*cos2SigmaM^2) -
+B/6*cos2SigmaM*(-3+4*sinSigma^2)*(-3+4*cos2SigmaM^2)))
+s <- b*A*(sigma-deltaSigma) / 1000
+
+return(s) # Distance in km
 }
 ```
 
 
 
-Now I run the code with example coordinates (translated into radians) for the flight between Pearson and Gatwick airport:
-```{r}
+#Now I run the code with example coordinates (translated into radians) for the flight between Pearson and Gatwick airport:
 
+```{r}
 #Template for GCD
 gcd.vif(long1,lat1,long2,lat2)
 
@@ -86,18 +85,95 @@ gcd.vif(-1.389815387,0.762311349,-0.003320978,0.892701983)
 
 
 
-That value is similar to the distance you will get by searching this online, so I trust that the process so far is working. Now I need to add a function that translates degrees (latitude and longitude coordinates) into radians.
-
+Below, I streamline the process so that you can enter in four longitude and latitude coordinates into long1deg etc. and come out with a distance in km
 ```{r}
+long1deg <- -79.630556
+lat1deg <- 43.677223
+long2deg <- -0.190278
+lat2deg <- 51.148056
 
-#create a vector for the coordinates of a flight from YYZ to LGW
-yyz_lgw<-c(-79.630556,43.677223,-0.190278,51.148056)
-	
-#transform coordinates in vector into degrees
-yyz_lgw_deg <- deg2rad(yyz_lgw)
-
-gcd.vif(yyz_lgw_deg) #doesn't work because gcd.vif wants four numbers separated by commas
-	
-
+long1 <- deg2rad(long1deg)
+lat1 <- deg2rad(lat1deg)
+long2 <- deg2rad(long2deg)
+lat2 <- deg2rad(lat2deg)
+distance<- gcd.vif(long1,lat1,long2,lat2)
+distance
 ```
 
+
+
+Now I want a function that will take that distance, and multiply it be a certain amount of emissions according to some if statements. So if the distance is less than 463km it should apply one emissions factor (0.27867kgCO2/km), if it is longer than 463 but shorter than 3700 it should apply a second emissions factor (0.16844kgCO2/km), and if it is longer than or equal to 3700 it should multiply the distance by a third emissions factor(0.19162kgCO2/km). Emissions factors from: (https://www.gov.uk/government/publications/greenhouse-gas-reporting-conversion-factors-2016)
+
+```{r}
+co2calculator <- function(distance) {
+  co2e<- if(distance<=463){
+    distance*0.27867
+    }   else if (distance>463 && distance<3700) {
+    distance*0.16844
+  } else if (distance>=3700) {
+    distance*0.19162
+  } 
+  return(co2e)
+  }
+
+co2calculator(1) # Check that for a value under 463 0.27867 is the emissions factor
+co2calculator(1000) #Check that for a medium range value 0.16844 is the factor
+co2calculator(10000) #Check that for a long range value 0.19162 is the factor
+```
+
+
+
+Now if I nest the function for changing longitude and latitude into radians, inside of the function for getting distance from radians, inside of my carbon calculator I can get the results by inputting only the longitude and latitude coordinates. Let's call this function carboncalculator and test it.
+```{r}
+carboncalculator <- function(lat1deg,long1deg,lat2deg,long2deg) {
+  #note that I have switched  the order of lat and long in this formula because the function I copied from the internet went against geography conventions
+  co2calculator(
+    gcd.vif(
+      deg2rad(long1deg),
+      deg2rad(lat1deg),
+      deg2rad(long2deg),
+      deg2rad(lat2deg)))
+}
+
+carboncalculator(50,100,50,100)
+#This returns an error which is good because the length of the trip is zero
+
+carboncalculator(49.3,123.1,50,119.4)
+#This is the trip from Vancouver to Kelowna, and the answer provided is reasonable (77kg of CO2)
+
+carboncalculator()
+
+
+
+gcd.vif(
+      deg2rad(123.1),
+      deg2rad(49.3),
+      deg2rad(119.4),
+      deg2rad(50))
+
+co2calculator(270)
+
+gcd.vif(
+      deg2rad(49.3),
+      deg2rad(123.1),
+      deg2rad(50),
+      deg2rad(119.4))
+
+
+co2calculator(gcd.vif(
+      deg2rad(123.1),
+      deg2rad(49.3),
+      deg2rad(119.4),
+      deg2rad(50)))
+
+
+long1deg <- -79.630556
+lat1deg <- 43.677223
+long2deg <- -0.190278
+lat2deg <- 51.148056
+carboncalculator<- function(long1deg,lat1deg,long2deg,lat2deg) {
+  co2calculator(gcd.vif(deg2rad(long1deg,lat1deg,long2deg,lat2deg)))
+}
+carboncalculator(0,1,2,3)#So this shows that the carbon calculator is taking the values of long1deg and not the values that we put inside of it, so you have to change the objects first.
+
+```
