@@ -1,13 +1,14 @@
 ---
-title: "hw06copy"
+title: "hw06"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, cache = F}
+knitr::opts_chunk$set(error = TRUE)
+#This alters the knit process so that errors can be displayed, which I need for this session where I intentionally introduce errors to test my functions
 ```
 
-## Practicing functions with a CARBON CALCULATOR
+### Practicing functions with a CARBON CALCULATOR
 
 In this homework I'm going to start by trying to make my own function that acts as a carbon calculator (translating two airport codes into a distance and then an amount of greenhouse gases).
 
@@ -73,32 +74,14 @@ return(s) # Distance in km
 
 
 
-#Now I run the code with example coordinates (translated into radians) for the flight between Pearson and Gatwick airport:
+Now I run the code with example coordinates (translated into radians) for the flight between Pearson and Gatwick airport:
 
 ```{r}
 #Template for GCD
-gcd.vif(long1,lat1,long2,lat2)
+#gcd.vif(long1,lat1,long2,lat2)
 
 #Actual calculation
 gcd.vif(-1.389815387,0.762311349,-0.003320978,0.892701983)
-```
-
-
-
-Below, I streamline the process so that you can enter in four longitude and latitude coordinates into long1deg etc. and come out with a distance in km
-```{r}
-long1deg <- -79.630556
-lat1deg <- 43.677223
-long2deg <- -0.190278
-lat2deg <- 51.148056
-
-long1 <- deg2rad(long1deg)
-lat1 <- deg2rad(lat1deg)
-long2 <- deg2rad(long2deg)
-lat2 <- deg2rad(lat2deg)
-distance<- gcd.vif(long1,lat1,long2,lat2)
-#Check output
-distance
 ```
 
 
@@ -127,9 +110,10 @@ co2calculator(10000) #Check that for a long range value 0.19162 is the factor
 
 
 Now if I nest the function for changing longitude and latitude into radians, inside of the function for getting distance from radians, inside of my carbon calculator, I can get the results by inputting only the longitude and latitude coordinates. Let's call this function carboncalculator and test it.
+
 ```{r}
+  #note that I have switched  the order of lat and long in this formula because the #function I copied from the internet went against geography conventions
 carboncalculator <- function(lat1deg,long1deg,lat2deg,long2deg) {
-  #note that I have switched  the order of lat and long in this formula because the function I copied from the internet went against geography conventions
   co2calculator(
     gcd.vif(
       deg2rad(long1deg),
@@ -205,9 +189,14 @@ carboncalculator3(1,2,3,4)
 #Check to see that it still works on regular inputs
 
 carboncalculator3(1,TRUE,3,4)
-#Now I have an error message that tells you EXACTLY which input is of the wrong class and which class it should be!
+
 
 ```
 
+
+
+I now have an error message that tells you EXACTLY which input is of the wrong class and which class it should be! 
+
+The next step for my carbon calculator would be to have it work just by inputting airport codes instead of longitude and latitude. I will have to leave that for my package because this was already too much work!
 
 
