@@ -125,7 +125,7 @@ carboncalculator <- function(lat1deg,long1deg,lat2deg,long2deg) {
 carboncalculator(50,100,50,100)
 #This returns an error which is good because the length of the trip is zero
 
-carboncalculator(49.3,123.1,50,119.4)
+carboncalculator(49.3,-123.1,50,-119.4)
 #This is the trip from Vancouver to Kelowna, and the answer provided is reasonable (77kg of CO2)
 
 carboncalculator(51.2,0.2,22.3,113.9)
@@ -197,6 +197,70 @@ carboncalculator3(1,TRUE,3,4)
 
 I now have an error message that tells you EXACTLY which input is of the wrong class and which class it should be! 
 
-The next step for my carbon calculator would be to have it work just by inputting airport codes instead of longitude and latitude. I will have to leave that for my package because this was already too much work!
+The next step for my carbon calculator would be to have it work just by inputting airport codes instead of longitude and latitude. I will have to leave that for my package because the first half took so long.
+
+
+## Working with the Singer Data
+```{r}
+library(singer)
+library(tidyverse)
+library(purrr)
+library(repurrrsive)
+library(ggmap)
+?revgeocode
+
+```
+
+```{r}
+#Practice using revgeocode with a simple example of Vancouver
+head(singer_locations)
+revgeocode(location=c(-79.3832,43.6532), output=c("more"))
+
+```
+
+
+
+This functions, and provides a lot of detail. Next I'll need to clean up the singer_locations database so it's ready for this function. Because they're not useful, and I don't want to waste the 2500 query limit per day for this function, I'm going to start by omiting all of the NA values. Furthermore, I'm going to drop all of the songs not from 2007 so that there is a more manageable number of songs to practice getting this code right with.
+
+Sidenote: While trying out how to solve this problem I read a great blog on how R uses vectors that I really reccommend: http://www.noamross.net/blog/2014/4/16/vectorization-in-r--why.html
+
+
+```{r}
+  levels(singer_locations$year)
+
+#Create an object with the years I want
+late_singer <- c("2006","2007")
+
+late_singer_locations <- singer_locations %>%
+  filter(year %in% late_singer)
+
+head(late_singer_locations)
+
+#Now remove the unwanted levels associated with the omitted data
+late_sing_loc <- late_singer_locations %>% 
+  droplevels()
+
+View(late_sing_loc)
+
+late_sing_loc %>% 
+  na.omit() %>% 
+  revgeocode(location=c(late_sing_loc$longitude,late_sing_loc$latitude), output=c("more")) #This doesn't work because revgeocode wants a vector and not a column in a dataframe, I guess. Will try and use possible() to make it happen
+
+?possibly
+?lapply
+?sapply
+
+late_sing_loc %>% 
+  na.omit() %>% 
+sapply(11:12, revgeocode(location=c(late_sing_loc$longitude,late_sing_loc$latitude), output=c("more")), simplify = TRUE)
+
+
+library(gapminder)
+sapply(gapminder$lifeExp, mean, simplify = TRUE)
+
+
+```
+
+
 
 
