@@ -222,7 +222,7 @@ carboncalculator(50,100,50,100)</code></pre>
 <pre><code>## Error in if (distance &lt;= 463) {: argument is of length zero</code></pre>
 <pre class="r"><code>#This returns an error which is good because the length of the trip is zero
 
-carboncalculator(49.3,123.1,50,119.4)</code></pre>
+carboncalculator(49.3,-123.1,50,-119.4)</code></pre>
 <pre><code>## [1] 77.54627</code></pre>
 <pre class="r"><code>#This is the trip from Vancouver to Kelowna, and the answer provided is reasonable (77kg of CO2)
 
@@ -289,7 +289,161 @@ carboncalculator3(1,TRUE,3,4)</code></pre>
 <pre><code>## Error in carboncalculator3(1, TRUE, 3, 4): this function only works for numeric input
 ## For longitude 1, you have provided an object of class:logical</code></pre>
 <p>I now have an error message that tells you EXACTLY which input is of the wrong class and which class it should be!</p>
-<p>The next step for my carbon calculator would be to have it work just by inputting airport codes instead of longitude and latitude. I will have to leave that for my package because this was already too much work!</p>
+<p>The next step for my carbon calculator would be to have it work just by inputting airport codes instead of longitude and latitude. I will have to leave that for my package because the first half took so long.</p>
+</div>
+<div id="working-with-the-singer-data" class="section level2">
+<h2>Working with the Singer Data</h2>
+<pre class="r"><code>library(singer)
+library(tidyverse)</code></pre>
+<pre><code>## Loading tidyverse: ggplot2
+## Loading tidyverse: tibble
+## Loading tidyverse: tidyr
+## Loading tidyverse: readr
+## Loading tidyverse: purrr
+## Loading tidyverse: dplyr</code></pre>
+<pre><code>## Conflicts with tidy packages ----------------------------------------------</code></pre>
+<pre><code>## filter(): dplyr, stats
+## lag():    dplyr, stats</code></pre>
+<pre class="r"><code>library(purrr)
+library(repurrrsive)
+library(ggmap)
+?revgeocode</code></pre>
+<pre><code>## starting httpd help server ...</code></pre>
+<pre><code>##  done</code></pre>
+<pre class="r"><code>#Practice using revgeocode with a simple example of Vancouver
+head(singer_locations)</code></pre>
+<pre><code>## # A tibble: 6 x 14
+##             track_id                 title            song_id
+##                &lt;chr&gt;                 &lt;chr&gt;              &lt;chr&gt;
+## 1 TRWICRA128F42368DB The Conversation (Cd) SOSURTI12A81C22FB8
+## 2 TRXJANY128F42246FC         Lonely Island SODESQP12A6D4F98EF
+## 3 TRIKPCA128F424A553 Here's That Rainy Day SOQUYQD12A8C131619
+## 4 TRYEATD128F92F87C9       Rego Park Blues SOEZGRC12AB017F1AC
+## 5 TRBYYXH128F4264585                 Games SOPIOCP12A8C13A322
+## 6 TRKFFKR128F9303AE3            More Pipes SOHQSPY12AB0181325
+## # ... with 11 more variables: release &lt;chr&gt;, artist_id &lt;chr&gt;,
+## #   artist_name &lt;chr&gt;, year &lt;int&gt;, duration &lt;dbl&gt;,
+## #   artist_hotttnesss &lt;dbl&gt;, artist_familiarity &lt;dbl&gt;, latitude &lt;dbl&gt;,
+## #   longitude &lt;dbl&gt;, name &lt;chr&gt;, city &lt;chr&gt;</code></pre>
+<pre class="r"><code>revgeocode(location=c(-79.3832,43.6532), output=c(&quot;more&quot;))</code></pre>
+<pre><code>## Information from URL : http://maps.googleapis.com/maps/api/geocode/json?latlng=43.6532,-79.3832&amp;sensor=false</code></pre>
+<pre><code>##                                                          address
+## 1 Toronto City Hall, 100 Queen St W, Toronto, ON M5G 1P5, Canada
+##           city_hall street_number             route neighborhood
+## 1 Toronto City Hall           100 Queen Street West     Downtown
+##     political locality administrative_area_level_2
+## 1 Old Toronto  Toronto            Toronto Division
+##   administrative_area_level_1 country postal_code
+## 1                     Ontario  Canada     M5G 1P5</code></pre>
+<p>This functions, and provides a lot of detail. Next I’ll need to clean up the singer_locations database so it’s ready for this function. Because they’re not useful, and I don’t want to waste the 2500 query limit per day for this function, I’m going to start by omiting all of the NA values. Furthermore, I’m going to drop all of the songs not from 2007 so that there is a more manageable number of songs to practice getting this code right with.</p>
+<p>Sidenote: While trying out how to solve this problem I read a great blog on how R uses vectors that I really reccommend: <a href="http://www.noamross.net/blog/2014/4/16/vectorization-in-r--why.html" class="uri">http://www.noamross.net/blog/2014/4/16/vectorization-in-r--why.html</a></p>
+<pre class="r"><code>  levels(singer_locations$year)</code></pre>
+<pre><code>## NULL</code></pre>
+<pre class="r"><code>#Create an object with the years I want
+late_singer &lt;- c(&quot;2006&quot;,&quot;2007&quot;)
+
+late_singer_locations &lt;- singer_locations %&gt;%
+  filter(year %in% late_singer)
+
+head(late_singer_locations)</code></pre>
+<pre><code>## # A tibble: 6 x 14
+##             track_id                       title            song_id
+##                &lt;chr&gt;                       &lt;chr&gt;              &lt;chr&gt;
+## 1 TRWICRA128F42368DB       The Conversation (Cd) SOSURTI12A81C22FB8
+## 2 TRKFFKR128F9303AE3                  More Pipes SOHQSPY12AB0181325
+## 3 TRXSSXI128F428FAD4 Endlich Ein Grund Zur Panik SODTXQY12A6D4F748E
+## 4 TRJQSXM128F932A05B             A perfect world SOFJTIS12AB0184236
+## 5 TRXLXET128F425E4FD   Gravemakers &amp; Gunslingers SOOSZAL12D02191FA1
+## 6 TRWKTVW12903CE5ACF                 Indian Deli SOGYBYQ12AB0188586
+## # ... with 11 more variables: release &lt;chr&gt;, artist_id &lt;chr&gt;,
+## #   artist_name &lt;chr&gt;, year &lt;int&gt;, duration &lt;dbl&gt;,
+## #   artist_hotttnesss &lt;dbl&gt;, artist_familiarity &lt;dbl&gt;, latitude &lt;dbl&gt;,
+## #   longitude &lt;dbl&gt;, name &lt;chr&gt;, city &lt;chr&gt;</code></pre>
+<pre class="r"><code>#Now remove the unwanted levels associated with the omitted data
+late_sing_loc &lt;- late_singer_locations %&gt;% 
+  droplevels()
+
+View(late_sing_loc)
+
+late_sing_loc %&gt;% 
+  na.omit() %&gt;% 
+  revgeocode(location=c(late_sing_loc$longitude,late_sing_loc$latitude), output=c(&quot;more&quot;)) #This doesn't work because revgeocode wants a vector and not a column in a dataframe, I guess. </code></pre>
+<pre><code>## Error: is.numeric(location) &amp;&amp; length(location) == 2 is not TRUE</code></pre>
+<pre class="r"><code>late_sing_loc %&gt;% 
+  na.omit() %&gt;% 
+sapply(11:12, revgeocode(location=c(longitude,latitude), output=c(&quot;more&quot;)), simplify = TRUE)</code></pre>
+<pre><code>## Error in match.fun(FUN): '11:12' is not a function, character or symbol</code></pre>
+<pre class="r"><code>#Here I use sapply and specify the eleventh and twelfth columns with no success.
+
+sapply(late_sing_loc[11:12], revgeocode(location=c(late_sing_loc$longitude,late_sing_loc$latitude), output=c(&quot;more&quot;)), simplify = TRUE)</code></pre>
+<pre><code>## Error: is.numeric(location) &amp;&amp; length(location) == 2 is not TRUE</code></pre>
+<pre class="r"><code>#And above I tried the same, but without piping. No luck.
+
+
+#To make my code simpler I create two new vectors which are the latitude and longitude columns without the NA values. I now know they are the same length and they are doubles, so less errors are now likely to arise.
+longi &lt;-late_sing_loc$longitude %&gt;% na.omit()
+lati &lt;- late_sing_loc$latitude %&gt;% na.omit()
+typeof(lati) #New vectors are doubles</code></pre>
+<pre><code>## [1] &quot;double&quot;</code></pre>
+<pre class="r"><code>map2(longi,lati, revgeocode(location=c(longi,lati), output=c(&quot;more&quot;)), simplify = TRUE)</code></pre>
+<pre><code>## Error: is.numeric(location) &amp;&amp; length(location) == 2 is not TRUE</code></pre>
+<pre class="r"><code>#Below I try instead to make a new function that is revgeocode but simplified:
+revgeocode2 &lt;- function(longi,lati) {
+  revgeocode(location=c(longi,lati), ouput=c(&quot;address&quot;))
+}
+
+
+mapply(revgeocode2(longi,lati),longi,lati)</code></pre>
+<pre><code>## Error in revgeocode(location = c(longi, lati), ouput = c(&quot;address&quot;)): unused argument (ouput = c(&quot;address&quot;))</code></pre>
+<pre class="r"><code>#It also fails to work, even with mapply
+
+mapply(revgeocode2,longi,lati)</code></pre>
+<pre><code>## Error in revgeocode(location = c(longi, lati), ouput = c(&quot;address&quot;)): unused argument (ouput = c(&quot;address&quot;))</code></pre>
+<pre class="r"><code>#Similar failure</code></pre>
+<p>So at this point I will settle for having a function with two arguments that works in *apply with my two vectors. Below I make that arbitrary function and try to use it with the apply family of functions.</p>
+<pre class="r"><code>latlong &lt;- function(longi,lati) {
+  3*longi*lati
+}
+
+
+#Testing that function works
+latlong(1,1)</code></pre>
+<pre><code>## [1] 3</code></pre>
+<pre class="r"><code>latlong(2,4)</code></pre>
+<pre><code>## [1] 24</code></pre>
+<pre class="r"><code>#Using apply with the new function.
+check1latlong &lt;- mapply(latlong,longi,lati)
+#And this successfully applied the function with two arguments to every entry in the two vectors. So the problem must be with the function revgeocode.
+
+check2latlong &lt;- map2(longi,lati,latlong)
+#This code also worked to generate the same result.
+
+head(check1latlong)</code></pre>
+<pre><code>## [1]  -9544.1268 -12228.0347 -12079.9975   -361.2333 -10546.6739 -15795.4286</code></pre>
+<pre class="r"><code>head(check2latlong)</code></pre>
+<pre><code>## [[1]]
+## [1] -9544.127
+## 
+## [[2]]
+## [1] -12228.03
+## 
+## [[3]]
+## [1] -12080
+## 
+## [[4]]
+## [1] -361.2333
+## 
+## [[5]]
+## [1] -10546.67
+## 
+## [[6]]
+## [1] -15795.43</code></pre>
+<pre class="r"><code>#These solutions came from a stackoverflow problem, but were not successful in my specific case of wanting to use revgeocode: https://stackoverflow.com/questions/14427253/passing-several-arguments-to-fun-of-lapply-and-others-apply</code></pre>
+</div>
+<div id="reflection-on-the-process" class="section level2">
+<h2>Reflection on the process</h2>
+<p>This was the hardest assignment for me so far. I learned a lot about functions, but it took so much code to implement them correctly that I couldn’t quite make my target of a completed carbon calculator. But I was glad to create my own, useful function that includes warning errors.</p>
+<p>In the second half of the assignment I am stuck with some glitch that won’t allow me to use the revgeocode function in conjunction with the apply family of functions and despite talking with a TA about it I was unable to solve it. I am glad for the experience with the apply functions, however, as I now know that I can use them to apply my carbon calculator function to a dataframe.</p>
 </div>
 
 

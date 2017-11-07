@@ -244,23 +244,69 @@ View(late_sing_loc)
 
 late_sing_loc %>% 
   na.omit() %>% 
-  revgeocode(location=c(late_sing_loc$longitude,late_sing_loc$latitude), output=c("more")) #This doesn't work because revgeocode wants a vector and not a column in a dataframe, I guess. Will try and use possible() to make it happen
+  revgeocode(location=c(late_sing_loc$longitude,late_sing_loc$latitude), output=c("more")) #This doesn't work because revgeocode wants a vector and not a column in a dataframe, I guess. 
 
-?possibly
-?lapply
-?sapply
 
 late_sing_loc %>% 
   na.omit() %>% 
-sapply(11:12, revgeocode(location=c(late_sing_loc$longitude,late_sing_loc$latitude), output=c("more")), simplify = TRUE)
+sapply(11:12, revgeocode(location=c(longitude,latitude), output=c("more")), simplify = TRUE)
+#Here I use sapply and specify the eleventh and twelfth columns with no success.
+
+sapply(late_sing_loc[11:12], revgeocode(location=c(late_sing_loc$longitude,late_sing_loc$latitude), output=c("more")), simplify = TRUE)
+#And above I tried the same, but without piping. No luck.
 
 
-library(gapminder)
-sapply(gapminder$lifeExp, mean, simplify = TRUE)
+#To make my code simpler I create two new vectors which are the latitude and longitude columns without the NA values. I now know they are the same length and they are doubles, so less errors are now likely to arise.
+longi <-late_sing_loc$longitude %>% na.omit()
+lati <- late_sing_loc$latitude %>% na.omit()
+typeof(lati) #New vectors are doubles
+
+map2(longi,lati, revgeocode(location=c(longi,lati), output=c("more")), simplify = TRUE)
+
+#Below I try instead to make a new function that is revgeocode but simplified:
+revgeocode2 <- function(longi,lati) {
+  revgeocode(location=c(longi,lati), ouput=c("address"))
+}
 
 
+mapply(revgeocode2(longi,lati),longi,lati)
+#It also fails to work, even with mapply
+
+mapply(revgeocode2,longi,lati)
+#Similar failure
 ```
 
 
 
+So at this point I will settle for having a function with two arguments that works in *apply with my two vectors. Below I make that arbitrary function and try to use it with the apply family of functions.
 
+```{r}
+latlong <- function(longi,lati) {
+  3*longi*lati
+}
+
+
+#Testing that function works
+latlong(1,1)
+latlong(2,4)
+
+
+#Using apply with the new function.
+check1latlong <- mapply(latlong,longi,lati)
+#And this successfully applied the function with two arguments to every entry in the two vectors. So the problem must be with the function revgeocode.
+
+check2latlong <- map2(longi,lati,latlong)
+#This code also worked to generate the same result.
+
+head(check1latlong)
+head(check2latlong)
+
+#These solutions came from a stackoverflow problem, but were not successful in my specific case of wanting to use revgeocode: https://stackoverflow.com/questions/14427253/passing-several-arguments-to-fun-of-lapply-and-others-apply
+```
+
+
+## Reflection on the process
+
+This was the hardest assignment for me so far. I learned a lot about functions, but it took so much code to implement them correctly that I couldn't quite make my target of a completed carbon calculator. But I was glad to create my own, useful function that includes warning errors.
+
+In the second half of the assignment I am stuck with some glitch that won't allow me to use the revgeocode function in conjunction with the apply family of functions and despite talking with a TA about it I was unable to solve it. I am glad for the experience with the apply functions, however, as I now know that I can use them to apply my carbon calculator function to a dataframe.
