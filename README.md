@@ -72,8 +72,8 @@ This repo contains all of the homework completed from STAT 545. Click on the lin
  - Find a city from a latitude/longitude coordinate pair
    +revgeocode()
  - Apply functions with multiple arguments to a vector
-   +mapply()
-   +map2()
+   + mapply()
+   + map2()
    
    **Resources**
    - [Vectors in R](http://www.noamross.net/blog/2014/4/16/vectorization-in-r--why.html)
