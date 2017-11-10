@@ -59,3 +59,22 @@ This repo contains all of the homework completed from STAT 545. Click on the lin
   **Resources**  
   - [cowplot for elegant graphs](https://cran.r-project.org/web/packages/cowplot/vignettes/introduction.html)
   - [ggthemr for easy, colourful graphs](https://www.rdocumentation.org/packages/ggthemr/versions/1.1.0)
+
+
+## [hw06](https://github.com/swynes/STAT545-hw-wynes-chris/tree/master/hw06)
+ 
+ **Skills**
+ - Knit document despite the presence of errors
+ - Air travel carbon calculator
+ - Create functions
+ - Create personalized error messages for functions
+   + if stop
+ - Find a city from a latitude/longitude coordinate pair
+   +revgeocode()
+ - Apply functions with multiple arguments to a vector
+   +mapply()
+   +map2()
+   
+   **Resources**
+   - [Vectors in R](http://www.noamross.net/blog/2014/4/16/vectorization-in-r--why.html)
+   - [Operators in R](https://www.statmethods.net/management/operators.html)
