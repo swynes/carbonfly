@@ -1,3 +1,6 @@
+
+library(corrplot)
+library(Hmisc)
 library(ggplot2)
 library(dplyr)
 library(stringr)
@@ -32,3 +35,30 @@ nba_points %>%
   na.omit() %>% 
   ggplot(aes(x=TS, y=SALARY))+
   geom_point()
+
+head(nba_points)
+
+#https://rstudio-pubs-static.s3.amazonaws.com/240657_5157ff98e8204c358b2118fa69162e18.html
+
+#Correlation coefficients plots
+
+cor_TS <- cor.test(nba_points$TS, nba_points$SALARY, method = "pearson")
+cor_MP <- cor.test(nba_points$MP, nba_points$SALARY, method = "pearson")
+cor_STL <- cor.test(nba_points$STL, nba_points$SALARY, method = "pearson")
+cor_BLK <- cor.test(nba_points$BLK, nba_points$SALARY, method = "pearson")
+
+
+cor_TS
+cor_MP
+cor_STL
+cor_BLK
+
+#Make a correlation coefficient matrix for selected variables
+nba_points_spec <- nba_points %>% select(TS, MP, SALARY, FG., BLK, AST, STL, TRB)
+cor_matrix <- round(cor(nba_points_spec), 2)
+cor_matrix
+
+#Why does it not work for SALARY?
+typeof(nba_points_spec$SALARY)
+typeof(nba_points_spec$STL)
+
