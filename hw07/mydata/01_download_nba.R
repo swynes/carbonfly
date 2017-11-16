@@ -5,4 +5,3 @@ library(downloader)
 #and working with my own dataset, I download an nba csv from a github user
 
 download(url = "https://raw.githubusercontent.com/AddisonGauss/NbaData2015-2016/master/nbasalariespoints.csv", destfile = "nbapoints.csv")
-head(nbapoints)
