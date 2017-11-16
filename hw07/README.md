@@ -1,4 +1,4 @@
-##[hw07](https://github.com/swynes/STAT545-hw-wynes-chris/tree/master/hw07/mydata)
+## [hw07](https://github.com/swynes/STAT545-hw-wynes-chris/tree/master/hw07/mydata)
 
 **Please open the link above to access the correct folder. I have saved some files in this homework folder for my reference from early attempts.
 
@@ -6,7 +6,7 @@
 
 I had a lot of trouble getting make downloaded onto my computer. The instructions provided to associate the correct path with make were for
 windows 7 which I don't have and I wasn't comfortable making guesses to try and close the gap between operating systems with such sensitive
-procedures. Because of this I was limited to the version that operates only within R.
+procedures. Because of this I was limited to completing the first task only.
 
 My code seems to generally work correctly. I downloaded my own data about NBA players to try and do something different from gapminder
 or other files that have been found for us. I used one R script to download the correct file, another R script to clean the data (which
