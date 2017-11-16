@@ -78,3 +78,18 @@ This repo contains all of the homework completed from STAT 545. Click on the lin
    **Resources**
    - [Vectors in R](http://www.noamross.net/blog/2014/4/16/vectorization-in-r--why.html)
    - [Operators in R](https://www.statmethods.net/management/operators.html)
+   
+  ## [hw07](https://github.com/swynes/STAT545-hw-wynes-chris/tree/master/hw07/mydata)
+  **Please follow the link above or go to the folder labelled "mydata" as other files in this homework are from a test run using Jenny's code**
+  
+  **Skills**
+  - Download data from a url
+  - Combine files using a makefile
+  - Use stringr package to remove punctuation from vector (removed commas and $ from SALARY)
+  - Basic linear model
+  - Basic correlation table
+  
+  **Resources**
+- [Correlation tables](https://rstudio-pubs-static.s3.amazonaws.com/240657_5157ff98e8204c358b2118fa69162e18.html)
+
+  
