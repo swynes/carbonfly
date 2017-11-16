@@ -8,29 +8,26 @@
 #
 
 library(shiny)
+library(ggplot2)
 bcl <- read.csv("C:/Users/AsusW10/Documents/STAT545/STAT545-hw-wynes-chris/hw08/bcl_test/bcl-data.csv", stringsAsFactors = FALSE)
-
 
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
-  
-  # Application title
-  titlePanel("Old Faithful Geyser Data"),
-  
-  # Sidebar with a slider input for number of bins 
+  titlePanel("BC Liquor store prices"),
   sidebarLayout(
     sidebarPanel(
-       sliderInput("bins",
-                   "Number of bins:",
-                   min = 1,
-                   max = 50,
-                   value = 30)
+      sliderInput("priceInput", "Price", 0, 100, c(25, 40), pre = "$"),
+      radioButtons("typeInput", "Product type",
+                   choices = c("BEER", "REFRESHMENT", "SPIRITS", "WINE"),
+                   selected = "WINE"),
+      selectInput("countryInput", "Country",
+                  choices = c("CANADA", "FRANCE", "ITALY"))
     ),
-    
-    # Show a plot of the generated distribution
     mainPanel(
-       plotOutput("distPlot")
+      plotOutput("coolplot"),
+    br(), br(),
+    tableOutput("results"))
     )
   )
-))
+)
