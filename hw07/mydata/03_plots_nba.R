@@ -4,17 +4,17 @@ library(dplyr)
 library(stringr)
 library(cowplot)
 
-nba_points <- read.csv("nbapoints.csv")
-View(nba_points)
-typeof(nba_points$Player)
+nba_points2 <- read.csv("nba_points.csv")
+View(nba_points2)
+typeof(nba_points2$Player)
 
-nba_points$Pos <- nba_points %>% as.character(Pos)
-head(nba_points)
+nba_points2$Pos <- nba_points2 %>% as.character(Pos)
+head(nba_points2)
 
 library(scales)
 library(viridis)
 
-salary_plot <- nba_points %>% 
+salary_plot <- nba_points2 %>% 
   na.omit() %>%
   mutate(SALARY=SALARY/1000000) %>% 
   filter(Rk!=272,Rk!=421) %>% #eliminate two players with unique, irrelevant positions

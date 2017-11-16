@@ -4,6 +4,8 @@ library(Hmisc)
 library(ggplot2)
 library(dplyr)
 library(stringr)
+library(tidyverse)
+library(forcats)
 
 
 nba_points <- read.csv("nbapoints.csv")
@@ -32,9 +34,10 @@ typeof(nba_points$SALARY)
 
 nba_points$SALARY <- as.numeric(nba_points$SALARY)
 
-
+#Check that it worked
 typeof(nba_points$SALARY)
   
+#Graph some data to see that all of the changes don't cause issues
 nba_points %>% 
   na.omit() %>% 
   ggplot(aes(x=TS, y=SALARY))+
@@ -44,7 +47,7 @@ head(nba_points)
 
 #https://rstudio-pubs-static.s3.amazonaws.com/240657_5157ff98e8204c358b2118fa69162e18.html
 
-#Correlation coefficients plots
+#Correlation coefficients
 
 cor_TS <- cor.test(nba_points$TS, nba_points$SALARY, method = "pearson")
 cor_MP <- cor.test(nba_points$MP, nba_points$SALARY, method = "pearson")
@@ -63,9 +66,13 @@ nba_points_spec <- nba_points %>% select(TS, MP, SALARY, FG., BLK, AST, STL, TRB
 cor_matrix <- round(cor(nba_points_spec), 2)
 cor_matrix
 
-#Why does it not work for SALARY?
+#Why does it not work for SALARY? Check type.
 typeof(nba_points_spec$SALARY)
 typeof(nba_points_spec$STL)
 
+#Try a linear model with the data
 fit <- lm(nba_points$SALARY ~ nba_points$MP + nba_points$TRB + nba_points$STL, data=nba_points)
 summary(fit)
+
+#Write data to file
+write_csv(nba_points, "nba_points.csv")
