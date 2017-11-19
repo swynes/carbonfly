@@ -1,7 +1,7 @@
 library(shiny)
 library(ggplot2)
 library(dplyr)
-bcl <- read.csv("C:/Users/AsusW10/Documents/STAT545/STAT545-hw-wynes-chris/hw08/bcl_test/bcl-data.csv", stringsAsFactors = FALSE)
+bcl <- read.csv("bcl-data.csv", stringsAsFactors = FALSE)
 
 
 # Define server logic required to draw a histogram
