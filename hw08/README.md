@@ -6,6 +6,8 @@ Find the code for the ui [here](https://github.com/swynes/STAT545-hw-wynes-chris
 
 Find the code for the server [here](https://github.com/swynes/STAT545-hw-wynes-chris/blob/master/hw08/bcl_test/server.R).
 
+Data for the app can be found [here](https://www.opendatabc.ca/dataset/bc-liquor-store-product-price-list-current-prices).
+
 The base of the app allows users to select Country, Price Range and Type of beverage and see a histogram of alcohol content and a table of
 all beverage matching the specifications.
 
