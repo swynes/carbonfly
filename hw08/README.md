@@ -8,3 +8,4 @@ all beverage matching the specifications.
 I expanded the app by
 1) Adding an image of a wine bottle
 2) Making the table interactive using the [DT package](https://cran.r-project.org/web/packages/DT/DT.pdf)
+  - This allows the user to select the number of visible entries per page and to search the table for content
