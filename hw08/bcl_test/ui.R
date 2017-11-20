@@ -12,7 +12,8 @@ shinyUI(fluidPage(
       radioButtons("typeInput", "Product type",
                    choices = c("BEER", "REFRESHMENT", "SPIRITS", "WINE"),
                    selected = "WINE"),
-      uiOutput("countryOutput")
+      uiOutput("countryOutput"),
+      img(src = "wine.jpg")
     ),
     mainPanel(
       plotOutput("coolplot"),

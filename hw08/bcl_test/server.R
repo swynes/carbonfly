@@ -1,6 +1,7 @@
 library(shiny)
 library(ggplot2)
 library(dplyr)
+library(cowplot)
 bcl <- read.csv("bcl-data.csv", stringsAsFactors = FALSE)
 
 
@@ -32,7 +33,8 @@ shinyServer(function(input, output) {
           return()
         }
         ggplot(filtered(), aes(Alcohol_Content)) +
-          geom_histogram()
+          geom_histogram() +
+          labs(x = "Alcohol Content", y="Number of Beverages")
       })
         
   output$results <- renderTable({
