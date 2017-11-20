@@ -2,6 +2,8 @@ library(shiny)
 library(ggplot2)
 library(dplyr)
 library(cowplot)
+library(DT)
+
 bcl <- read.csv("bcl-data.csv", stringsAsFactors = FALSE)
 
 
@@ -37,7 +39,7 @@ shinyServer(function(input, output) {
           labs(x = "Alcohol Content", y="Number of Beverages")
       })
         
-  output$results <- renderTable({
+  output$results <- DT::renderDataTable({
     filtered()
   })
   

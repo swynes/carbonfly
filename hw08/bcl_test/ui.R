@@ -1,10 +1,13 @@
 library(shiny)
 library(ggplot2)
+library(shinythemes
+        )
 bcl <- read.csv("bcl-data.csv", stringsAsFactors = FALSE)
 
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
+  theme = shinytheme("slate"),
   titlePanel("BC Liquor store prices"),
   sidebarLayout(
     sidebarPanel(
@@ -18,7 +21,7 @@ shinyUI(fluidPage(
     mainPanel(
       plotOutput("coolplot"),
       br(), br(),
-      tableOutput("results"))
+      DT::dataTableOutput("results"))
   )
 )
 )
