@@ -5,8 +5,8 @@ account: swynes
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 237554
-bundleId: 1084811
+bundleId: 1084820
 url: https://swynes.shinyapps.io/bcl_test/
-when: 1511137773.5423
+when: 1511138350.83749
 asMultiple: FALSE
 asStatic: FALSE
