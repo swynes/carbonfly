@@ -92,4 +92,13 @@ This repo contains all of the homework completed from STAT 545. Click on the lin
   **Resources**
 - [Correlation tables](https://rstudio-pubs-static.s3.amazonaws.com/240657_5157ff98e8204c358b2118fa69162e18.html)
 
+  ## [how08](https://github.com/swynes/STAT545-hw-wynes-chris/tree/master/hw08)
   
+  **Skills**
+  - Using shiny
+  - Setting up a separate ui.R and server.R scripts
+  - Add pictures by storing them in a www folder in the main project directory
+  
+  **Resources**
+  - [Shiny Themes](https://rstudio.github.io/shinythemes/)
+  - [DT package for interactive tables](https://cran.r-project.org/web/packages/DT/DT.pdf)
