@@ -1,8 +1,10 @@
 ## SUMMARY
 
-Find the new and improved app [here](https://swynes.shinyapps.io/bcl_test/)
-Find the code for the ui [here](https://github.com/swynes/STAT545-hw-wynes-chris/blob/master/hw08/bcl_test/ui.R)
-Find the code for the server [here](https://github.com/swynes/STAT545-hw-wynes-chris/blob/master/hw08/bcl_test/server.R)
+Find the new and improved app [here](https://swynes.shinyapps.io/bcl_test/).
+
+Find the code for the ui [here](https://github.com/swynes/STAT545-hw-wynes-chris/blob/master/hw08/bcl_test/ui.R).
+
+Find the code for the server [here](https://github.com/swynes/STAT545-hw-wynes-chris/blob/master/hw08/bcl_test/server.R).
 
 The base of the app allows users to select Country, Price Range and Type of beverage and see a histogram of alcohol content and a table of
 all beverage matching the specifications.
