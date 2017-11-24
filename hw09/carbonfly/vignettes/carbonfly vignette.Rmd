@@ -27,21 +27,26 @@ The function takes the general form gcd(long1,lat1,long2,lat2) where
 - long1 and lat1 are the longitude and latitude coordinates of the starting point
 - long2 and lat2 are the longitude and latitude coordinates of the end point
 
+**NOTE** In this formula longitude comes first, though latitude is usually listed first by convention
 
 **EXAMPLE**
 Calculation for the distance between the Eiffel tower in Paris (48.8584 degrees North, 2.2945 degrees East) and the Great Pyramid of Giza (29.9792 degrees North, 31.1342 degrees East). Note that latitudes south of the equator are negative and that longitudes west of the Prime Meridian are negative. 
 
-**NOTE** In this formula longitude comes first, though latitude is usually listed first by convention
-
 ```{r}
+library(carbonfly)
+gcd(48.8584,2.2945,29.9792,31.1342)
 gcd(2.2945,48.8584,31.1342,29.9792)
 ```
 
-Fly from London (51.5074° N, 0.1278° W) to Quito, Ecuador (0.1807° S, 78.4678° W)
+
+
+**EXAMPLE**
+Fly from Toronto (43.6777° N, 79.6248° W) to Johannesburg airport (JNB) (26.1367° S, 28.2411° E)
 
 ```{r}
-gcd(-0.1278,51.5074,-78.4678,-0.1807)
+gcd(-79.6248,43.6777,28.2411,-26.1367)
 ```
+
 
 
 
