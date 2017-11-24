@@ -1,43 +1,43 @@
-#' Converts 
+#' Finds the greenhouse gases emitted by travelling between two airports
 #'
-#' Does not assume a spherical earth and is therefore more accurate.
+#' Input 
 #'
-#' @param (long1, lat1, long2, lat2) The latitude and longitude in radians
+#' @param (origin,destination) The origin airport and destination airport
 #'
-#' @return The distance between the coordinates \code{long1, lat1, long2, lat2}.
+#' @return Total greenhouse gases in kgCO2e \code{origin,destination}.
 #'
 #' @details
-#' This function is complicated by a lot of trigonometry.
-#'
-#' The distance returned is in kilometers
+#' Makes use of radiative forcing. For more information on whether the radiative
+#' forcing multiplier is appropriate please see: 
+#' https://www.gov.uk/government/publications/greenhouse-gas-reporting-conversion-factors-2016
+#' and
+#' https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/553488/2016_methodology_paper_Final_V01-00.pdf
 #'
 #'
 #' @example
-#' Distance from Toronto to Vancouver with coordinates in radians
-#' gcd.vif(-1.385, 0.7618, -2.149, 0.86)
+#' carboncalculator("YVR","LGW")
 #' @export
 
 library(carbonfly)
 library(magrittr)
 library(dplyr)
   
-origin <- "YVR"
-destination <- "YYZ"
 
-lat1 <- airport_codes %>% 
-  filter(aircode == origin ) %$% c(lat)
-
-long1 <- airport_codes %>% 
-  filter(aircode == origin ) %$% c(long)
-
-lat2 <- airport_codes %>% 
-  filter(aircode == destination ) %$% c(lat)
-
-long2 <- airport_codes %>% 
-  filter(aircode == destination ) %$% c(long)
-
-
-carboncalculator <- function(lat1, long1, lat2, long2) {
+carboncalculator <- function(origin, destination) {
+  
+  lat1 <- airport_codes %>% 
+    filter(aircode == origin ) %$% c(lat)
+  
+  long1 <- airport_codes %>% 
+    filter(aircode == origin ) %$% c(long)
+  
+  lat2 <- airport_codes %>% 
+    filter(aircode == destination ) %$% c(lat)
+  
+  long2 <- airport_codes %>% 
+    filter(aircode == destination ) %$% c(long)
+  
+  
   co2calculator(
     gcd(
       deg2rad(long1),
@@ -45,5 +45,3 @@ carboncalculator <- function(lat1, long1, lat2, long2) {
       deg2rad(long2),
       deg2rad(lat2)))
 }
-
-carboncalculator(lat1,long1,lat2,long2)
