@@ -13,15 +13,25 @@
 #'
 #'
 #' @examples
-#' Distance from Toronto to Vancouver with coordinates in radians
-#' gcd.vif(-1.385, 0.7618, -2.149, 0.86)
+#' Distance from Paris to Cairo by latitude and longitude corodinates
+#' List longitude first
+#' gcd(2.2945,48.8584,31.1342,29.9792)
+#' 
 #' @export
 
 gcd <- function(long1, lat1, long2, lat2) {
 
+  
+  # Convert degrees to radians
+  long1 <- deg2rad(long1)
+  lat1 <- deg2rad(lat1)
+  long2 <- deg2rad(long2)
+  lat2 <- deg2rad(lat2)
+  
+  
   # WGS-84 ellipsoid parameters
   a <- 6378137         # length of major axis of the ellipsoid (radius at equator)
-  b <- 6356752.314245  # ength of minor axis of the ellipsoid (radius at the poles)
+  b <- 6356752.314245  # length of minor axis of the ellipsoid (radius at the poles)
   f <- 1/298.257223563 # flattening of the ellipsoid
 
   L <- long2-long1 # difference in longitude
@@ -69,3 +79,14 @@ gcd <- function(long1, lat1, long2, lat2) {
 
   return(s) # Distance in km
 }
+
+
+gcd(51.5074,-0.1278,-0.1807,-78.4678)
+gcd(-0.1278,51.5074,-78.4678,-0.1807)
+#Actual: 9192
+
+
+#Paris to Cairo
+gcd(48.8584,2.2945,29.9792,31.1342)
+gcd(2.2945,48.8584,31.1342,29.9792)
+#Actual: 3213

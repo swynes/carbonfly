@@ -1,0 +1,84 @@
+---
+title: "carbonfly vignette"
+author: "Setj Wumes"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Introduction to carbonfly
+
+Determing the emissions associated with air travel between two locations can be difficult. Many websites are available to do this for you, but it can be hard to pass your data through the websites, and they are not always transparent about their methodology.
+
+This package:
+
+- Allows you to calculate greater circle distance between two coordinates with great accuracy
+- Allows you to calculate air travel emissions if you know absolute distance
+- Allows you to calculate air travel emissions between two airports using the IATA 3-letter code.
+
+## Greater Circle Distance
+
+The gcd() function allows you to calculate greater circle distance between two points on the globe, as measured in kilometers. Because the globe is spherical, when travelling across it you cannot use a straight line to calculate distance between two points. Additionally, the globe is not a perfect sphere, so complicated trigonometry is required to produce accurate calculations. The gcd() function takes all of this into account. For longer methods this is more accurate (though it breaks down for antipodal points). Code adapted from: https://www.r-bloggers.com/great-circle-distance-calculations-in-r/
+
+The function takes the general form gcd(long1,lat1,long2,lat2) where
+- long1 and lat1 are the longitude and latitude coordinates of the starting point
+- long2 and lat2 are the longitude and latitude coordinates of the end point
+
+
+**EXAMPLE**
+Calculation for the distance between the Eiffel tower in Paris (48.8584 degrees North, 2.2945 degrees East) and the Great Pyramid of Giza (29.9792 degrees North, 31.1342 degrees East). Note that latitudes south of the equator are negative and that longitudes west of the Prime Meridian are negative. 
+
+**NOTE** In this formula longitude comes first, though latitude is usually listed first by convention
+
+```{r}
+gcd(2.2945,48.8584,31.1342,29.9792)
+```
+
+Fly from London (51.5074° N, 0.1278° W) to Quito, Ecuador (0.1807° S, 78.4678° W)
+
+```{r}
+gcd(-0.1278,51.5074,-78.4678,-0.1807)
+```
+
+
+
+## Styles
+
+The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+
+    output: 
+      rmarkdown::html_vignette:
+        css: mystyles.css
+
+## Figures
+
+The figure sizes have been customised so that you can easily put two images side-by-side. 
+
+```{r, fig.show='hold'}
+plot(1:10)
+plot(10:1)
+```
+
+You can enable figure captions by `fig_caption: yes` in YAML:
+
+    output:
+      rmarkdown::html_vignette:
+        fig_caption: yes
+
+Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+
+## More Examples
+
+You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(mtcars, 10))
+```
+
+Also a quote using `>`:
+
+> "He who gives up [code] safety for [code] speed deserves neither."
+([via](https://twitter.com/hadleywickham/status/504368538874703872))

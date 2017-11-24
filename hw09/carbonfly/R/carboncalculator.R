@@ -40,8 +40,8 @@ carboncalculator <- function(origin, destination) {
   
   co2calculator(
     gcd(
-      deg2rad(long1),
-      deg2rad(lat1),
-      deg2rad(long2),
-      deg2rad(lat2)))
+      (long1),
+      (lat1),
+      (long2),
+      (lat2)))
 }
