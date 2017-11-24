@@ -13,8 +13,8 @@
 #'
 #' @examples
 #' co2calculator(10)
-#' co2calculator(100)
 #' co2calculator(1000)
+#' co2calculator(10000)
 #' @export
 
 co2calculator <- function(distance) {
