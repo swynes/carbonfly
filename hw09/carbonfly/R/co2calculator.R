@@ -9,7 +9,7 @@
 #'
 #' @details
 #' This function has three if statements because long, medium and short distance
-#' Have different efficiencies
+#' Have different efficiencies. Flying short distance therefore uses a different emissions multiplier than medium or long etc.
 #'
 #' @examples
 #' co2calculator(10)
