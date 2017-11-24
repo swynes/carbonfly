@@ -33,9 +33,9 @@ gcd <- function(long1, lat1, long2, lat2) {
     stop('this function only works for numeric input\n',
          'For longitude 2, you have provided an object of class:',class(long2)[1])
   }
-  if(!is.numeric(long2deg)){
+  if(!is.numeric(lat2)){
     stop('this function only works for numeric input\n',
-         'For latitude 2, you have provided an object of class:',class(long2deg)[1])
+         'For latitude 2, you have provided an object of class:',class(lat2)[1])
   }
   
   # Convert degrees to radians

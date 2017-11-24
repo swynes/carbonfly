@@ -39,3 +39,19 @@ The gcd() function measures greater circle distance. It contains a lot of trigon
 CO2calculator() takes a distance input and converts it into a carbon footprint measured in kgCO2e (or total greenhouse gas emissions). This function has three conditionals that allow it to differentiate between short, medium, and long distance flights which have different emissions factors. It depends on gcd() and therefore deg2rad() as well. Do not confuse it with carboncalculator(). They have the same output type, but different inputs.
 
 carboncalculator() is the central function of the package. It takes an input (two, IATA airport codes) and looks up their coordinates in a global data table (airport_codes) stored as a datafile in this package. It is dependent on co2calculator(), gcd() and deg2rad() to convert these codes into coordinate degrees, then into radians, then into a greater circle distance and then into a carbon footprint.
+
+
+##Understanding the carbon calculator
+
+Source for the gcd() code comes from: https://www.r-bloggers.com/great-circle-distance-calculations-in-r/
+
+Source for greenhouse gas emissions factors: https://www.gov.uk/government/publications/greenhouse-gas-reporting-conversion-factors-2016
+
+Source for assumptions informing the calculations: https://www.gov.uk/government/uploads/system/uploads/attachment_data/file/553488/2016_methodology_paper_Final_V01-00.pdf
+
+**NOTE 1** This calculator assumes an equal responsibility for emissions for each passenger whereas some calculators assign more weight to individuals in first class who take up more space.
+
+**NOTE 2** This calculator applies radiative forcing which accounts for the additional warming caused by releasing gases other than CO2. To remove the radiative forcing multiplier simply divide any output from co2calculator() or carboncalculator() by 1.9
+
+**NOTE 3** This calculator assumes an 8% uplift factor, i.e. it adds 8% distance to each flight which is the average extra distance travelled by a plane because of holding patterns, avoiding inclement weather etc. This addition takes place in the co2calculator() function and is therefore present in the output from co2calculator() and carboncalculator(), whereas gcd() provides the regular distance. Multiply the gcd() output by 1.08 to get the average actual flight distance if desired.
+

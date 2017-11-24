@@ -24,12 +24,13 @@ co2calculator <- function(distance) {
          'You have provided an object of class:',class(distance)[1])
   }
   
+  #Uplift factor of an additional 8% added here to account for average distance added to a flight path by rerouting, holding patterns etc.
   co2e<- if(distance<=463){
-    distance*0.27867 #short distance emissions factor
+    distance*0.27867*1.08 #short distance emissions factor
   }   else if (distance>463 && distance<3700) {
-    distance*0.16844 #medium distance emissions factor
+    distance*0.16844*1.08 #medium distance emissions factor
   } else if (distance>=3700) {
-    distance*0.19162 #long distance emissions factor
+    distance*0.19162*1.08 #long distance emissions factor
   } 
   return(co2e) #measured in kgCO2e
 }
