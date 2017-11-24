@@ -25,11 +25,11 @@ co2calculator <- function(distance) {
   }
   
   co2e<- if(distance<=463){
-    distance*0.27867
+    distance*0.27867 #short distance emissions factor
   }   else if (distance>463 && distance<3700) {
-    distance*0.16844
+    distance*0.16844 #medium distance emissions factor
   } else if (distance>=3700) {
-    distance*0.19162
+    distance*0.19162 #long distance emissions factor
   } 
-  return(co2e)
+  return(co2e) #measured in kgCO2e
 }
