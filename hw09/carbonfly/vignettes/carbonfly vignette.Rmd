@@ -1,6 +1,6 @@
 ---
 title: "carbonfly vignette"
-author: "Setj Wumes"
+author: "Seth Wumes"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -8,6 +8,10 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
+```{r}
+knitr::opts_chunk$set(error = TRUE)
+```
+
 
 # Introduction to carbonfly
 
@@ -49,41 +53,35 @@ gcd(-79.6248,43.6777,28.2411,-26.1367)
 
 
 
+## Calculating emissions when you know distance
 
-## Styles
+The CO2calclulator() function can be used when you know the distance between the two points you are travelling. The emissions factors that inform this calculation take into account the fact that short trips use more fuel per kilometer than long trips because takeoffs burn more fuel than cruising. The emissions factors also account for average aircraft occupancy so the figure provided represents the total of greenhouse gases burned per passenger.
 
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+Emissions factors:
+flights <463km 0.27867kgCo2e per passenger per kilometer
 
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
+Distance | Emissions Factors
+------------- | -------------
+<463km | 0.27867kgCo2e pkm
+463-3700km | 0.16844kgCO2e pkm
+>3700km | 0.19162kgCO2e pkm
 
-## Figures
+**EXAMPLES**
+Find emissions for a 100km flight
 
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+```{r}
+co2calculator(100)
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
 
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+## Calculating emissions from two airport codes
 
-## More Examples
+The carboncalculator() function takes two inputs, an origin airport and a destination airport and returns the total emissions per passenger created by taking the flight as measured in kgCO2e.
 
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
+**EXAMPLE**
+```{r}
+library(carbonfly)
+carboncalculator("YYZ","YVR")
 ```
 
-Also a quote using `>`:
-
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))

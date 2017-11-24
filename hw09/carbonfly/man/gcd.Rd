@@ -21,6 +21,8 @@ This function is complicated by a lot of trigonometry.
 The distance returned is in kilometers
 }
 \examples{
-Distance from Toronto to Vancouver with coordinates in radians
-gcd.vif(-1.385, 0.7618, -2.149, 0.86)
+Distance from Paris to Cairo by latitude and longitude corodinates
+List longitude first
+gcd(2.2945,48.8584,31.1342,29.9792)
+
 }

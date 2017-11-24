@@ -18,14 +18,9 @@
 #' carboncalculator("YVR","LGW")
 #' @export
 
-library(carbonfly)
-library(magrittr)
-library(dplyr)
-  
-
 carboncalculator <- function(origin, destination) {
   
-  lat1 <- airport_codes %>% 
+  lat1 <- airport_codes %>%
     filter(aircode == origin ) %$% c(lat)
   
   long1 <- airport_codes %>% 
