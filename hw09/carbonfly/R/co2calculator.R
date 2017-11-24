@@ -18,6 +18,12 @@
 #' @export
 
 co2calculator <- function(distance) {
+  
+  if(!is.numeric(distance)){
+    stop('this function only works for numeric input\n',
+         'You have provided an object of class:',class(distance)[1])
+  }
+  
   co2e<- if(distance<=463){
     distance*0.27867
   }   else if (distance>463 && distance<3700) {
