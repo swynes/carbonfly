@@ -74,7 +74,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr::opts_chunk$<span class="kw">set</span>(<span class="dt">error =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <div id="introduction-to-carbonfly" class="section level1">
 <h1>Introduction to carbonfly</h1>
 <p>Determing the emissions associated with air travel between two locations can be difficult. Many websites are available to do this for you, but it can be hard to pass your data through the websites, and they are not always transparent about their methodology.</p>
@@ -133,9 +132,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2>Calculating emissions from two airport codes</h2>
 <p>The carboncalculator() function takes two inputs, an origin airport and a destination airport and returns the total emissions per passenger created by taking the flight as measured in kgCO2e.</p>
 <p><strong>EXAMPLE</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(carbonfly)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)</code></pre></div>
+<pre><code>## 
+## Attaching package: 'dplyr'</code></pre>
+<pre><code>## The following objects are masked from 'package:stats':
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(magrittr)
 <span class="kw">carboncalculator</span>(<span class="st">&quot;YYZ&quot;</span>,<span class="st">&quot;YVR&quot;</span>)</code></pre></div>
-<pre><code>## Error in filter(., aircode == origin): object 'aircode' not found</code></pre>
+<pre><code>## [1] 565.0865</code></pre>
 </div>
 </div>
 

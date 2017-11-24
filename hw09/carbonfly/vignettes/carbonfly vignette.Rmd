@@ -8,9 +8,6 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-```{r}
-knitr::opts_chunk$set(error = TRUE)
-```
 
 
 # Introduction to carbonfly
@@ -81,7 +78,8 @@ The carboncalculator() function takes two inputs, an origin airport and a destin
 
 **EXAMPLE**
 ```{r}
-library(carbonfly)
+library(dplyr)
+library(magrittr)
 carboncalculator("YYZ","YVR")
 ```
 
