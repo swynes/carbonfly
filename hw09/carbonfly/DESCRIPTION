@@ -1,12 +1,13 @@
 Package: carbonfly
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Calculates emissions from air travel
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: Seth Wynes <seth.wynes@gmail.com>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Author: Seth Wynes
+Authors@R: person("Wynes", "Seth", email="seth.wynes@gmail.com",
+    role=c("aut", "cre"))
+Description: Functions for calculating greenhouse gas emissions for air travel.
+    Calculates distance, emissions from distance, and emissions between airports.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
