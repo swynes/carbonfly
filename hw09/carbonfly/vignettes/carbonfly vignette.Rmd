@@ -1,6 +1,6 @@
 ---
 title: "carbonfly vignette"
-author: "Seth Wumes"
+author: "Seth Wynes"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
