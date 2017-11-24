@@ -12,6 +12,6 @@
 #'
 #' @examples
 #' deg2rad(180)
-#' deg2rad(60)
+#' deg2rad(90)
 
 deg2rad <- function(deg) return(deg*pi/180) #Change degrees into radians
