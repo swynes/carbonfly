@@ -21,5 +21,5 @@ This function isn't complicated.
 }
 \examples{
 deg2rad(180)
-deg2rad(60)
+deg2rad(90)
 }
