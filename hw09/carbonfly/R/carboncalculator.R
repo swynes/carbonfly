@@ -20,6 +20,18 @@
 
 carboncalculator <- function(origin, destination) {
   
+  if(!is.character(origin)){
+    stop('this function only works for character input\n',
+         'Please supply a three digit airport code\n',
+         'You have provided an object of class:',class(origin)[1])
+  }
+  
+  if(!is.character(destination)){
+    stop('this function only works for character input\n',
+         'Please supply a three digit airport code\n',
+         'You have provided an object of class:',class(origin)[1])
+  }
+  
   lat1 <- airport_codes %>%
     filter(aircode == origin ) %$% c(lat)
   

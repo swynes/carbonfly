@@ -19,16 +19,9 @@
 
 co2calculator <- function(distance) {
   
-  if(!is.character(origin)){
-    stop('this function only works for character input\n',
-         'Please supply a three digit airport code\n',
-         'You have provided an object of class:',class(origin)[1])
-  }
-  
-  if(!is.character(destination)){
-    stop('this function only works for character input\n',
-         'Please supply a three digit airport code\n',
-         'You have provided an object of class:',class(origin)[1])
+  if(!is.numeric(distance)){
+    stop('this function only works for numeric input\n',
+         'You have provided an object of class:',class(distance)[1])
   }
   
   co2e<- if(distance<=463){
