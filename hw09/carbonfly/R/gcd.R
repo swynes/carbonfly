@@ -12,7 +12,7 @@
 #' The distance returned is in kilometers
 #'
 #'
-#' @example
+#' @examples
 #' Distance from Toronto to Vancouver with coordinates in radians
 #' gcd.vif(-1.385, 0.7618, -2.149, 0.86)
 #' @export
