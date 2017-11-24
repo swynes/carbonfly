@@ -21,26 +21,24 @@ library(carbonfly)
 origin <- "YVR"
 destination <- "YYZ"
 
-carboncalculator(origin,destination)
+lat1 <- airport_codes %>% 
+  filter(aircode == origin ) %$% c(lat)
 
-carboncalculator <- function(origin, destination) {
-  
-  lat1 <- airport_codes %>% 
-    filter(aircode == origin ) %$% c(lat)
-  
-  long1 <- airport_codes %>% 
-    filter(aircode == origin ) %$% c(long)
-  
-  lat2 <- airport_codes %>% 
-    filter(aircode == destination ) %$% c(lat)
-  
-  long2 <- airport_codes %>% 
-    filter(aircode == destination ) %$% c(long)
-  
+long1 <- airport_codes %>% 
+  filter(aircode == origin ) %$% c(long)
+
+lat2 <- airport_codes %>% 
+  filter(aircode == destination ) %$% c(lat)
+
+long2 <- airport_codes %>% 
+  filter(aircode == destination ) %$% c(long)
+
+
+carboncalculator <- function(lat1, long1, lat2, long2) {
   co2calculator(
     gcd.vif(
       deg2rad(long1),
       deg2rad(lat1),
       deg2rad(long2),
       deg2rad(lat2)))
-  
+}
