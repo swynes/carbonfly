@@ -32,6 +32,8 @@ carboncalculator <- function(origin, destination) {
          'You have provided an object of class:',class(origin)[1])
   }
   
+  
+  #Lookup longitude and latitude coordinates in the airport_codes data table
   lat1 <- airport_codes %>%
     filter(aircode == origin ) %$% c(lat)
   
@@ -44,7 +46,7 @@ carboncalculator <- function(origin, destination) {
   long2 <- airport_codes %>% 
     filter(aircode == destination ) %$% c(long)
   
-  
+  #Combine the function for distance with the new coordinates supplied above
   co2calculator(
     gcd(
       (long1),
