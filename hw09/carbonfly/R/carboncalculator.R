@@ -18,6 +18,9 @@
 #' @export
 
 library(carbonfly)
+library(magrittr)
+library(dplyr)
+  
 origin <- "YVR"
 destination <- "YYZ"
 
@@ -36,9 +39,11 @@ long2 <- airport_codes %>%
 
 carboncalculator <- function(lat1, long1, lat2, long2) {
   co2calculator(
-    gcd.vif(
+    gcd(
       deg2rad(long1),
       deg2rad(lat1),
       deg2rad(long2),
       deg2rad(lat2)))
 }
+
+carboncalculator(lat1,long1,lat2,long2)
