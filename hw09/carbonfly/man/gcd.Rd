@@ -20,3 +20,7 @@ This function is complicated by a lot of trigonometry.
 
 The distance returned is in kilometers
 }
+\examples{
+Distance from Toronto to Vancouver with coordinates in radians
+gcd.vif(-1.385, 0.7618, -2.149, 0.86)
+}
