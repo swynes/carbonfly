@@ -14,6 +14,6 @@ Supressing error messages in rmd
 Creating dataframes from text
 
 **Resources**
-[Accessing APIs](https://www.r-bloggers.com/accessing-apis-from-r-and-a-little-r-programming/)
+(Accessing APIs)[https://www.r-bloggers.com/accessing-apis-from-r-and-a-little-r-programming/]
 [https://developer.nytimes.com](New York Times API)
 [tidytext](https://github.com/juliasilge/tidytext/blob/master/vignettes/tidytext.Rmd)
