@@ -1,0 +1,192 @@
+---
+title: "hw10"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+```
+
+```{r}
+library(listviewer)
+library(knitr)
+library(tidyverse)
+library(glue)
+library(httr)
+library(jsonlite)
+library(xml2)
+library(purrr)
+library(repurrrsive)
+library(tidytext)
+```
+
+## New York Times API
+https://developer.nytimes.com
+
+```{r}
+my_key<-"insert_api_key_here"
+nyt_books<-GET(glue("http://api.nytimes.com/svc/books/v3/lists/names.json?api-key={my_key}"))nyt_books<-GET(glue("http://api.nytimes.com/svc/books/v3/lists/names.json?api-key={my_key}"))
+
+status_code(nyt_books) 
+```
+
+
+
+So at this point I have used my api key successfully and the status code is 200 so I'm ready to proceed by converting the html file into a list.
+
+```{r}
+result1 <- content(nyt_books)
+
+#Explore list called result1:
+nchar(result1)
+class(result1) #From this I confirm that it is a list
+length(result1) #I confirm that the list has a length of four
+
+View(result1)
+```
+
+
+
+From viewing the list it seems like the sub-list "results" contains the most interesting features. I convert this list into a dataframe. Help from: 
+https://www.r-bloggers.com/accessing-apis-from-r-and-a-little-r-programming/
+
+```{r}
+result1.df <- do.call(what = "rbind",
+                      args = lapply(result1$results, as.data.frame))
+```
+
+
+
+I now have my first dataframe from NYT. The description of this data was vague, but now I can see that it is more of a table of contents for their API. I therefore go back to use a different, more interesting API. Note that this time I use query parameters built into the url by specifying that the most emailed articles must be from the science section and from time period "1".
+
+```{r}
+nyt_science<-GET(glue("http://api.nytimes.com/svc/mostpopular/v2/mostemailed/Science/1.json?api-key={my_key}"))
+
+status_code(nyt_science) #status code works
+
+science_list <- content(nyt_science)
+
+View(science_list)
+```
+
+
+
+Once again I've created a list that now needs to be converted into a dataframe. Unfortunately this time I want to access the same element from multiple nested lists. After much searching I failed to find a way to do this using apply or map functions. The following code is way too long so I'd be happy to hear of a better solution. My current work around is to pull out the desired items into many different dataframes and then perform a full join on them.
+
+```{r}
+science_df <- lapply(science_list, function(x) {
+  df <- data_frame(title        = science_list$results[[1]]$title,
+                   byline     = science_list$results[[1]]$byline,
+                   url     = science_list$results[[1]]$url,
+                   abstract= science_list$results[[1]]$abstract)
+}) %>% bind_rows()
+
+science_df2 <- lapply(science_list, function(x) {
+  df <- data_frame(title        = science_list$results[[2]]$title,
+                   byline     = science_list$results[[2]]$byline,
+                   url     = science_list$results[[2]]$url,
+                   abstract= science_list$results[[2]]$abstract)
+}) %>% bind_rows()
+
+science_df3 <- lapply(science_list, function(x) {
+  df <- data_frame(title        = science_list$results[[3]]$title,
+                   byline     = science_list$results[[3]]$byline,
+                   url     = science_list$results[[3]]$url,
+                   abstract= science_list$results[[3]]$abstract)
+}) %>% bind_rows()
+
+science_df4 <- lapply(science_list, function(x) {
+  df <- data_frame(title        = science_list$results[[4]]$title,
+                   byline     = science_list$results[[4]]$byline,
+                   url     = science_list$results[[4]]$url,
+                   abstract= science_list$results[[4]]$abstract)
+}) %>% bind_rows() 
+
+science_df5 <- lapply(science_list, function(x) {
+  df <- data_frame(title        = science_list$results[[5]]$title,
+                   byline     = science_list$results[[5]]$byline,
+                   url     = science_list$results[[5]]$url,
+                   abstract= science_list$results[[5]]$abstract)
+}) %>% bind_rows()
+
+science_df6 <- lapply(science_list, function(x) {
+  df <- data_frame(title        = science_list$results[[6]]$title,
+                   byline     = science_list$results[[6]]$byline,
+                   url     = science_list$results[[6]]$url,
+                   abstract= science_list$results[[6]]$abstract)
+}) %>% bind_rows()
+
+science_df7 <- lapply(science_list, function(x) {
+  df <- data_frame(title        = science_list$results[[7]]$title,
+                   byline     = science_list$results[[7]]$byline,
+                   url     = science_list$results[[7]]$url,
+                   abstract= science_list$results[[7]]$abstract)
+}) %>% bind_rows()
+
+
+
+#Join the multiple dfs
+#https://stackoverflow.com/questions/8091303/simultaneously-merge-multiple-data-frames-in-a-list
+library(plyr)
+df_combine <- join_all(list(
+  science_df,science_df2,science_df3,science_df4,science_df5,
+  science_df6,science_df7),
+  by='title', type='full')
+```
+
+
+
+Now remove deplucaites from the dataframe using distinct()
+```{r}
+df_combine2 <- distinct(df_combine, title, byline, url, abstract)
+View(df_combine2)
+```
+
+
+
+Now that I have a dataframe, I make use tidytext to break the abstracts into individual words and analyze them.
+https://github.com/juliasilge/tidytext/blob/master/vignettes/tidytext.Rmd
+library(tidytext)
+
+
+
+```{r}
+clean_abstracts <- df_combine %>% unnest_tokens(word, abstract) %>% 
+  anti_join(stop_words, by = "word")
+
+View(clean_abstracts)  
+typeof(clean_abstracts$word)
+```
+
+
+
+Make a list of the most frequently used words in the article abstracts:
+```{r}
+common_words <- clean_abstracts %>%
+  count(vars="word") %>% 
+  arrange(-freq)
+
+View(common_words)
+```
+
+
+So we see that this actually isn't a very interesting output. The most common
+word is researchers, used 8 times, and every other common word is used a max of four times. But now that I have the process down I could make use of it elsewhere to better effect.
+
+
+##REFLECTION
+
+This was one of the harder assignments for me. It took a long time to find an API where I did not get a 404 or 403 error in the status code. When I finally did get it to work on the NYT API it was because that API gave me an example of the code which I fiddled with. 
+
+For instance, the NYT endpoint is: "https://api.nytimes.com/svc/"
+
+Then the API page for the NYT books best-sellers lists suggests adding "/lists/best-sellers/history.json" to this to access the best sellers list.
+
+But, in between those two pieces of the URL you must add: "books/v3"
+
+You can only find this out by using the NYT "Try it out" feature which shows the full url. Even if you tried to take that code format and apply it to another section, such as movies, you might be misled because their books api is on version 3, hence v3, whereas movies is on version 2. 
+
+Of course the other thing I found difficult was removing the title, byline, url and abstract from multiple lists, each of which was nested within several other lists. My workaround involved copying code multiple times over which I know is problematic but as this is a homework assignment and not a thesis, I ran out of time to find the best way to do it.
+
+On the brighter side I was really excited to finally get some data out of an API as well as to use the function distinct() for the first time and the package "tidytext" which I found extremely useful!
+
