@@ -7,17 +7,17 @@ output: github_document
 knitr::opts_chunk$set(error = TRUE)
 ```
 
-```{r}
+```{r results='hide', message=FALSE, warning=FALSE} 
+library(tidyverse)
 library(listviewer)
 library(knitr)
-library(tidyverse)
 library(glue)
 library(httr)
 library(jsonlite)
 library(xml2)
 library(purrr)
-library(repurrrsive)
 library(tidytext)
+library(repurrrsive)
 ```
 
 ## New York Times API
