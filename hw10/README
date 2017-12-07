@@ -15,5 +15,5 @@ Also apologies for the messiness of the error messages which seem to be a necess
 
 **Resources**
 - [Accessing APIs](https://www.r-bloggers.com/accessing-apis-from-r-and-a-little-r-programming/)
-- [https://developer.nytimes.com](New York Times API)
 - [tidytext](https://github.com/juliasilge/tidytext/blob/master/vignettes/tidytext.Rmd)
+- [https://developer.nytimes.com](New York Times API)
