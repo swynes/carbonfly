@@ -7,13 +7,13 @@ Also apologies for the messiness of the error messages which seem to be a necess
 [Homework 10](https://github.com/swynes/carbonfly/blob/master/hw10/hw10.md)
 
 **Skills**
-Scraping data from an API
-distinct()
-tidytext package
-Supressing error messages in rmd
-Creating dataframes from text
+- Scraping data from an API
+- distinct()
+- tidytext package
+- Supressing error messages in rmd
+- Creating dataframes from text
 
 **Resources**
-(Accessing APIs)[https://www.r-bloggers.com/accessing-apis-from-r-and-a-little-r-programming/]
-[https://developer.nytimes.com](New York Times API)
-[tidytext](https://github.com/juliasilge/tidytext/blob/master/vignettes/tidytext.Rmd)
+- [Accessing APIs](https://www.r-bloggers.com/accessing-apis-from-r-and-a-little-r-programming/)
+- [https://developer.nytimes.com](New York Times API)
+- [tidytext](https://github.com/juliasilge/tidytext/blob/master/vignettes/tidytext.Rmd)
