@@ -1,0 +1,19 @@
+##Homework 10
+
+Apologies for the fact that this is hosted in a different directory from the other homework files, although my links on my READMEs should simplify things.
+
+Also apologies for the messiness of the error messages which seem to be a necessary evil from not making my NYT API key public.
+
+[Homework 10](https://github.com/swynes/carbonfly/blob/master/hw10/hw10.md)
+
+**Skills**
+Scraping data from an API
+distinct()
+tidytext package
+Supressing error messages in rmd
+Creating dataframes from text
+
+**Resources**
+[Accessing APIs](https://www.r-bloggers.com/accessing-apis-from-r-and-a-little-r-programming/)
+[https://developer.nytimes.com](New York Times API)
+[tidytext](https://github.com/juliasilge/tidytext/blob/master/vignettes/tidytext.Rmd)
